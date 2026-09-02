@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { prisma } from '../../generated/lib/prisma.js';
+import { Router } from "express";
+import { prisma } from "../../generated/lib/prisma.js";
 
 const createUserRoute = Router().post("/createuser", async (req, res) => {
     try {
