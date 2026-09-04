@@ -18,7 +18,7 @@ const getSpecifiedUser = async (req, res) => {
     try {
         const userId = req.params.id;
         
-        const user = prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: { id: userId }
         });
 
@@ -34,4 +34,27 @@ const getSpecifiedUser = async (req, res) => {
     };
 }
 
-export { getUsers, getSpecifiedUser };
+const deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        await prisma.user.delete({
+            where: { id: userId }
+        });
+
+        res.status(200).json({
+            message: `Successfully deleted user ${user.name}`
+        });
+    } catch (error) {
+        res.json({
+            message: "Something went wrong",
+            error: error.message
+        });
+    }
+}
+
+export { getUsers, getSpecifiedUser, deleteUser };

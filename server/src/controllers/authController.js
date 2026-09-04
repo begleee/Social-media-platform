@@ -8,25 +8,25 @@ const register = async (req, res) => {
     const { name, email, password } = req.body;
 
     const userExists = await prisma.user.findUnique({
-        where: email
+        where: { email }
     });
 
     if(userExists) {
-        res.status(400).json({ error: "User already exists with this email" });
+        return res.status(400).json({ error: "User already exists with this email" });
     }
 
-    const salt = await bcrypt.getSalt(10);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await prisma.user.create({
         data: {
             name,
             email,
-            hashedPassword
+            password: hashedPassword
         },
     });
 
-    res.status(201).json({
+    return res.status(201).json({
         status: "success",
         data: {
             user: {
@@ -63,7 +63,7 @@ const login = async (req, res) => {
 
     const token = genereteToken(user.id, res);
 
-    res.status(201).json({
+    return res.status(201).json({
         status: "success",
         data: {
             user: {
@@ -81,7 +81,7 @@ const logout = async (req, res) => {
         expires: new Date(0)
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         status: "success",
         message: "Logout successfully"
     });
@@ -90,7 +90,7 @@ const logout = async (req, res) => {
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
-        const user = prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email },
         });
 
@@ -112,7 +112,7 @@ const forgotPassword = async (req, res) => {
 
         sendPasswordResetToken(email, resetToken, req);
 
-        res.status(200).json({ 
+        return res.status(200).json({ 
             message: "A reset token has been sent",
             details: `Expires in ${tokenExpiry}`
         });

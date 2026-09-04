@@ -12,10 +12,10 @@ datasource db {
   provider = "postgresql"
 }
 
-// enum Role {
-//   USER
-//   ADMIN
-// }
+enum Role {
+  USER
+  ADMIN
+}
 
 model User {
   id String @id @default(uuid())
@@ -24,7 +24,11 @@ model User {
   password String
   resetPasswordToken String? @unique
   resetPasswordExpires DateTime?
+  role Role @default(USER)
   posts Post[]
+
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @updatedAt
 }
 
 model Post {
@@ -32,5 +36,8 @@ model Post {
   title String
   details String?
   userId String
-  author User @relation(fields: [userId], references: [id])
+  author User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @updatedAt
 }
