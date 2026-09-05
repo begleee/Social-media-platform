@@ -30,11 +30,11 @@ model User {
   updatedAt DateTime @updatedAt
 
   posts Post[]
-  // comments Comment[]
-  // likes Like[]
+  comments Comment[]
+  likes Like[]
 
-  // followers Follow[] @relation("UserFollowing")
-  // followings Follow[] @relation("UserFollowers")
+  followers Follow[] @relation("UserFollowing")
+  followings Follow[] @relation("UserFollowers")
 }
 
 model Post {
@@ -42,43 +42,43 @@ model Post {
   title String
   details String?
   userId String
-  author User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  authorId User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // comments Comment[]
-  // likes Like[]
+  comments Comment[]
+  likes Like[]
 }
 
-// model Comment {
-//   id String @id @default(uuid())
-//   content String
-//   userId String
-//   postId String
+model Comment {
+  id String @id @default(uuid())
+  content String
+  userId String
+  postId String
 
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-// }
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
 
-// model Like {
-//   id String @id @default(uuid())
-//   userId String
-//   postId String
+model Like {
+  id String @id @default(uuid())
+  userId String
+  postId String
 
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-//   @@unique([userId, postId])
-// }
+  @@unique([userId, postId])
+}
 
-// model Follow {
-//   id String @id @default(uuid())
-//   followerId String
-//   followingId String
+model Follow {
+  id String @id @default(uuid())
+  followerId String
+  followingId String
 
-//   follower User @relation("UserFollowing",fields: [followerId], references: [id], onDelete: Cascade)
-//   following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+  follower User @relation("UserFollowing",fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
 
-//   @@unique([followerId, followingId])
-// }
+  @@unique([followerId, followingId])
+}

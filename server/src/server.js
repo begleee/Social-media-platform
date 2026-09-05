@@ -3,6 +3,7 @@ import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import likeRouter from "./routes/likeRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use("/", userRoutes);
 app.use("/", postRoutes);
 app.use("/", authRoutes);
+app.use("/", likeRouter);
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,9 +1,9 @@
 import { prisma } from "../../generated/lib/prisma.js";
 
 const createPost = async (req, res) => {
+    const { title, details } = req.body;
+    const userId = req.user.id;
     try {
-        const { userId, title, details } = req.body;
-
         const newPost = await prisma.post.create({
             data: {
                 title,
@@ -57,7 +57,7 @@ const updatePost = async (req, res) => {
         }
 
         const isAdmin = userRole === "ADMIN";
-        const isAuthor = post.authorId === userId;
+        const isAuthor = post.userId === userId;
 
         if(!isAdmin && !isAuthor) {
             return res.status(403).json({ message: "Access denied. You are not authorized to delete this post." });
@@ -105,7 +105,6 @@ const deletePost = async (req, res) => {
     const postId = req.params.id;
     const userId = req.user.id;
     const userRole = req.user.role;
-
     try {
         const post = await prisma.post.findUnique({
             where: { id: postId }
@@ -116,7 +115,7 @@ const deletePost = async (req, res) => {
         }
 
         const isAdmin = userRole === "ADMIN";
-        const isAuthor = post.authorId === userId;
+        const isAuthor = post.userId === userId;
 
         if(!isAdmin && !isAuthor) {
             return res.status(403).json({ message: "Access denied. You are not authorized to delete this post." });
