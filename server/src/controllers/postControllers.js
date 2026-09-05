@@ -73,13 +73,16 @@ const updatePost = async (req, res) => {
 
         return res.status(200).json({ 
             message: 'Post successfully updated',
-            data: post
+            changed: {
+                title,
+                details
+            }
         });
 
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
-}
+};
 
 const getUserPosts = async (req, res) => {
     const { userId } = req.params.id;
@@ -127,6 +130,6 @@ const deletePost = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
-}
+};
 
 export { createPost, getPost, updatePost, getUserPosts, deletePost };

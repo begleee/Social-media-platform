@@ -15,8 +15,8 @@ const getUsers = async (req, res) => {
 };
 
 const getSpecifiedUser = async (req, res) => {
+    const userId = req.params.id;
     try {
-        const userId = req.params.id;
         
         const user = await prisma.user.findUnique({
             where: { id: userId }
@@ -32,11 +32,51 @@ const getSpecifiedUser = async (req, res) => {
             error: error?.message
         });
     };
-}
+};
+
+const updateUser = async (req, res) => {
+    const userId = req.params.id;
+    const userRole = req.user.role;
+
+    const { name } = req.body;
+    try {
+        const user = await prisma.user.findUnique({
+            where: {id: userId }
+        });
+
+        if(!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const isAdmin = userRole === "ADMIN";
+        const isAuthor = req.user.id === userId;
+
+        if(!isAdmin && !isAuthor) {
+            return res.status(403).json({ message: "Access denied. You are not authorized to update profile." });
+        }
+
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                name
+            }
+        });
+
+        return res.status(200).json({ 
+            message: 'User successfully updated',
+            changed: {
+                name
+            }
+        });
+
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
 
 const deleteUser = async (req, res) => {
+    const userId = req.params.id;
     try {
-        const userId = req.params.id;
 
         const user = await prisma.user.findUnique({
             where: { id: userId }
@@ -55,6 +95,6 @@ const deleteUser = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
-export { getUsers, getSpecifiedUser, deleteUser };
+export { getUsers, getSpecifiedUser, updateUser, deleteUser };

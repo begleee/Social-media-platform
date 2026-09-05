@@ -8,7 +8,8 @@ const router = Router();
 router.post("/create-post", authMiddleware, createPost);
 router.get("/get-post/:id", getPost);
 router.post("/update-post/:id", authMiddleware, updatePost);
-router.get("/get-user-posts/:id", getUserPosts);
 router.delete("/delete-post/:id", authMiddleware, deletePost);
+
+router.get("/get-user-posts/:id", getUserPosts);
 
 export default router;
