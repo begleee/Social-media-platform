@@ -43,10 +43,7 @@ const togglePostLike = async (req, res) => {
             return res.status(201).json({ like: true, message: "Post liked successfully" });
         }
     } catch (error) {
-        res.status(500).json({ 
-            message: "Someting went wrong",
-            error: error.message
-        });
+        return res.status(500).json({ error: error.message });
     }
 };
 
