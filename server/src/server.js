@@ -1,14 +1,18 @@
 import "dotenv/config";
 import express from "express";
+import cookieParser from "cookie-parser";
+
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import followRoutes from "./routes/followRoutes.js";
+import feedRoutes from "./routes/feedRoutes.js";
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/", userRoutes);
 app.use("/", postRoutes);
@@ -16,6 +20,7 @@ app.use("/", authRoutes);
 app.use("/", likeRoutes);
 app.use("/", commentRoutes);
 app.use("/", followRoutes);
+app.use("/", feedRoutes);
 
 const PORT = process.env.PORT || 5000;
 

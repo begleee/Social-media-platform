@@ -49,7 +49,7 @@ const updatePost = async (req, res) => {
     const { title, details } = req.body;
     try {
         const post = await prisma.post.findUnique({
-            where: {id: postId }
+            where: { id: postId }
         });
 
         if(!post) {
