@@ -1,14 +1,32 @@
 import { prisma } from "../../generated/lib/prisma.js";
+import { generateFileBase64Url } from "../utils/generateFileBase64Url.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const createPost = async (req, res) => {
     const { title, details } = req.body;
     const userId = req.user.id;
     try {
+        const fileUrls = req.files && req.files.length > 0
+            ? req.files.map(file => generateFileBase64Url(file.buffer, file.mimetype))
+            : [];
+        
+        const resultPromises = fileUrls.map(async url => {
+            return await cloudinary.uploader.upload(url, {
+                folder: "post_photos",
+                resource_type: "auto"
+            });
+        });
+
+        const uploadResults = await Promise.all(resultPromises);
+
+        const imageUrls = uploadResults.map(upload => upload.secure_url);
+
         const newPost = await prisma.post.create({
             data: {
                 title,
                 details,
-                userId
+                userId,
+                imageUrls
             }
         });
 
@@ -48,6 +66,21 @@ const updatePost = async (req, res) => {
     const userRole = req.user.role;
     const { title, details } = req.body;
     try {
+        const fileUrls = req.files && req.files.length > 0
+            ? req.files.map(file => generateFileBase64Url(file.buffer, file.mimetype))
+            : [];
+        
+        const resultPromises = fileUrls.map(async url => {
+            return await cloudinary.uploader.upload(url, {
+                folder: "post_photos",
+                resource_type: "auto"
+            });
+        });
+
+        const uploadResults = await Promise.all(resultPromises);
+
+        const imageUrls = uploadResults.map(upload => upload.secure_url);
+
         const post = await prisma.post.findUnique({
             where: { id: postId }
         });
@@ -67,7 +100,8 @@ const updatePost = async (req, res) => {
             where: { id: postId },
             data: {
                 title,
-                details
+                details,
+                imageUrls
             }
         });
 
@@ -75,7 +109,8 @@ const updatePost = async (req, res) => {
             message: 'Post successfully updated',
             changed: {
                 title,
-                details
+                details,
+                imageUrls
             }
         });
 

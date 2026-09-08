@@ -44,6 +44,7 @@ model Post {
   details String?
   userId String
   authorId User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageUrls String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
