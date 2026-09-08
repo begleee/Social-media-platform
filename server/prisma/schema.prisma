@@ -44,7 +44,7 @@ model Post {
   details String?
   userId String
   authorId User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  imageUrls String[]
+  imageUrls ImageUrl[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -83,4 +83,12 @@ model Follow {
   following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
+}
+
+model ImageUrl {
+  id String @id
+  url String
+  postId String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
