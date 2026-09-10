@@ -10,7 +10,7 @@ import likeRoutes from "./routes/likeRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import followRoutes from "./routes/followRoutes.js";
 import feedRoutes from "./routes/feedRoutes.js";
-import uploadImageRoutes from "./routes/uploadImageRoutes.js";
+import imageRoutes from "./routes/imageRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use("/", likeRoutes);
 app.use("/", commentRoutes);
 app.use("/", followRoutes);
 app.use("/", feedRoutes);
-app.use("/", uploadImageRoutes);
+app.use("/", imageRoutes);
 
 const PORT = process.env.PORT || 5000;
 

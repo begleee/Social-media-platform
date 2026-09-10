@@ -10,7 +10,6 @@ const uploadImages = (req, res, next) =>{
         next();
     });
 };
-    
 
 const validateFilePresence = (req, res, next) => {
     try {
