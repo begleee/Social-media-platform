@@ -2,7 +2,13 @@ import { prisma } from "../../generated/lib/prisma.js";
 
 const getUsers = async (req, res) => {
     try {
-        const users = await prisma.user.findMany();
+        const users = await prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                avatarUrl: true
+            }
+        });
 
         res.status(200).json({ users });
 

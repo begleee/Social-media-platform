@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import { configCloudinary } from "./conifg/cloudinary.js";
 
 import userRoutes from "./routes/userRoutes.js";
@@ -15,6 +16,7 @@ import imageRoutes from "./routes/imageRoutes.js";
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 configCloudinary();
 
 app.use("/", userRoutes);
