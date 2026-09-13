@@ -1,11 +1,15 @@
 import { ThemeProvider } from "#components/theme-provider"
 import { ModeToggle } from "#components/mode-toggle";
 import { Link, Outlet } from "react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryCient = new QueryClient();
 
 function App() {
 
   return (
     <>
+      <QueryClientProvider client={queryCient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <div>
           <nav>
@@ -18,6 +22,7 @@ function App() {
           </main>
         </div>
       </ThemeProvider>
+      </QueryClientProvider>
     </>
   )
 }

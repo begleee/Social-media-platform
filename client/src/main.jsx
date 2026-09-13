@@ -9,16 +9,10 @@ import About from './pages/About.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    Component: App,
     children: [
-      {
-        path: "",
-        element: <Home/>
-      },
-      {
-        path: "/about",
-        element: <About/>
-      }
+      { index: true, Component: Home },
+      { path: "about", Component: About }
     ]
   }
 ]);
