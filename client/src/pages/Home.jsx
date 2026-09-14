@@ -7,12 +7,10 @@ export default function Home() {
   if(isLoading) return <p>Loading users...</p>;
   if(isError) return <p>Failed loading users.</p>;
 
-  console.log(data.users);
-
   return (
     <div>
       <ul>
-        {data.users.map(user => (
+        {data && data.users.map(user => (
           <li key={user.id}>
             Name: {user.name}
           </li>
