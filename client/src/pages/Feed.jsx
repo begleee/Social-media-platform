@@ -1,7 +1,7 @@
 import React from 'react'
 import { useUsers } from '../hooks/useUsers'
 
-export default function Home() {
+export default function Feed() {
   const { data, isLoading, isError } = useUsers();
 
   if(isLoading) return <p>Loading users...</p>;

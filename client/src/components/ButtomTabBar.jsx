@@ -9,8 +9,8 @@ export default function ButtomTabBar() {
     return (
     <Tabs>
         <TabsList defaultValue="/">
-            <TabsTrigger value="/" onClick={() => navigate("/")}>
-                    Home
+            <TabsTrigger value="/" onClick={() => navigate("/feed")}>
+                    Feed
             </TabsTrigger>
             <TabsTrigger value="/about" onClick={() => navigate("/about")}>
                     About
