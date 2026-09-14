@@ -20,8 +20,8 @@ const getUsers = async (req, res) => {
     };
 };
 
-const getSpecifiedUser = async (req, res) => {
-    const userId = req.params.id;
+const getMe = async (req, res) => {
+    const userId = req.user.id;
     try {
         
         const user = await prisma.user.findUnique({
@@ -29,7 +29,7 @@ const getSpecifiedUser = async (req, res) => {
         });
 
         res.status(200).json({
-            name: user.name
+            user
         });
 
     } catch (error) {
@@ -103,4 +103,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-export { getUsers, getSpecifiedUser, updateUser, deleteUser };
+export { getUsers, getMe, updateUser, deleteUser };
