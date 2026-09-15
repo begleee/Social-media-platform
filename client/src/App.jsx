@@ -11,13 +11,13 @@ function App() {
     <>
       <QueryClientProvider client={queryCient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <div className="min-w-screen flex flex-col justify-between">
-          <main className="min-w-screen h-[50vh] flex flex-col items-center">
+        <div className="flex flex-col gap-40">
+          <main className="min-w-screen flex flex-col items-center">
             <Outlet/>
           </main>
-          <nav className="min-w-screen flex flex-col items-center">
+          {/* <nav className="min-w-screen flex flex-col items-center">
             <ButtomTabBar/>
-          </nav>
+          </nav> */}
         </div>
       </ThemeProvider>
       </QueryClientProvider>

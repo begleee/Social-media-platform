@@ -7,7 +7,7 @@ export default function ProtectedRoute() {
     const loading = useAuthStore(state => state.loading);
 
     if(loading) (<h1>Loading profile...</h1>)
-        
+    
     return user ? (
         <Outlet/>
     ) : (
