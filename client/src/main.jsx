@@ -6,7 +6,8 @@ import App from './App.jsx'
 import Feed from './pages/Feed.jsx'
 import About from './pages/About.jsx'
 import Profile from './pages/Profile.jsx'
-import Login from './pages/Login.jsx'
+import Login from './pages/auth/Login.jsx'
+import Register from './pages/auth/Register.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 const router = createBrowserRouter([
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       { path: "login", Component: Login },
+      { path: "register", Component: Register},
       { 
         Component: ProtectedRoute,
         children: [

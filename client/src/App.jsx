@@ -12,17 +12,14 @@ function App() {
       <QueryClientProvider client={queryCient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <div className="flex flex-col gap-40">
-          <main className="min-w-screen flex flex-col items-center">
+          <main className="min-w-screen flex flex-col items-center justify-between">
             <Outlet/>
           </main>
-          {/* <nav className="min-w-screen flex flex-col items-center">
-            <ButtomTabBar/>
-          </nav> */}
         </div>
       </ThemeProvider>
       </QueryClientProvider>
     </>
   )
-}
+};
 
 export default App
