@@ -29,7 +29,11 @@ const getMe = async (req, res) => {
         });
 
         res.status(200).json({
-            user
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }
         });
 
     } catch (error) {

@@ -63,7 +63,7 @@ const login = async (req, res) => {
 
     const token = genereteToken(user.id, res);
 
-    return res.status(201).json({
+    return res.status(200).json({
         status: "success",
         user: {
             id: user.id,
@@ -74,7 +74,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    res.cookies("jwt", "", {
+    res.cookie("jwt", "", {
         httpOnly: true,
         expires: new Date(0)
     });
