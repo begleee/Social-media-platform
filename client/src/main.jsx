@@ -11,22 +11,22 @@ import Register from './pages/auth/Register.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    Component: App,
-    children: [
-      { path: "login", Component: Login },
-      { path: "register", Component: Register},
-      { 
-        Component: ProtectedRoute,
-        children: [
-          { index: true, path: "feed", Component: Feed },
-          { path: "about", Component: About },
-          { path: "profile", Component: Profile}
-        ]
-      }
-    ]
-  }
+    { path: "login", Component: Login },
+    { path: "register", Component: Register},
+    {
+      path: "/",
+      Component: App,
+      children: [
+        { 
+          Component: ProtectedRoute,
+          children: [
+            { index: true, path: "feed", Component: Feed },
+            { path: "about", Component: About },
+            { path: "profile", Component: Profile}
+          ]
+        }
+      ]
+    }
 ]);
 
 createRoot(document.getElementById('root')).render(

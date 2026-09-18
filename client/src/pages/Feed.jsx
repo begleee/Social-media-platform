@@ -1,21 +1,13 @@
 import React from 'react'
 import { useUsers } from '../hooks/useUsers'
+import FeedHead from '../components/feed/FeedHead';
+import FeedContent from '../components/feed/FeedContent';
 
 export default function Feed() {
-  const { data, isLoading, isError } = useUsers();
-
-  if(isLoading) return <p>Loading users...</p>;
-  if(isError) return <p>Failed loading users.</p>;
-
   return (
-    <div>
-      <ul>
-        {data && data.users.map(user => (
-          <li key={user.id}>
-            Name: {user.name}
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col gap-4 items-center relative">
+      <FeedHead/>
+      <FeedContent/>
     </div>
   )
 }

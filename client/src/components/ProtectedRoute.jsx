@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { Navigate, Outlet } from 'react-router';
-import ButtomTabBar from './ButtomTabBar';
+import { Spinner } from "#components/ui/spinner";
 
 export default function ProtectedRoute() {
     const user = useAuthStore(state => state.user);
@@ -13,14 +13,15 @@ export default function ProtectedRoute() {
     }, [checkAuth]);
 
     if(loading) {
-        return <h1>Loading profile...</h1>
+        return <Spinner className='size-8'/>
     }
     
     return user ? (
-        <>
-            <Outlet/>
-            <ButtomTabBar/>
-        </>
+        <div className="min-h-screen">
+            <main className="mt-10">
+                <Outlet/>
+            </main>
+        </div>
     ) : (
         <Navigate to="/login"/>
     )

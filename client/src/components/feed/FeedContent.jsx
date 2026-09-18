@@ -1,7 +1,49 @@
-import React from 'react'
+import { ScrollArea } from "#components/ui/scroll-area";
+import { Button } from "#components/ui/button";
+import { Spinner } from "#components/ui/spinner";
+import { useFeed } from "../../hooks/useFeed";
+
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "#components/ui/card";
+import { Badge } from "#components/ui/badge";
 
 export default function FeedContent() {
+  const { data, isLoading, isError } = useFeed();
+
+  if(isLoading) return (
+    <Button disabled className="flex gap-2 items-center">
+      <p>Loading</p>
+      <Spinner data-icon="inline-start" />
+    </Button>
+  );
+
+  if(isError) return <p>Failed loading posts.</p>;
+
   return (
-    <div>FeedContent</div>
+    <ScrollArea className="h-[50%] w-lg mt-20 z-10">
+      {data?.feed?.map(post => (
+        <Card className="relative mx-auto max-w-2xl pt-0" key={post.id}>
+          <div className="absolute inset-0 z-30 aspect-video bg-black/35"/>
+          {<img
+            src="https://avatar.vercel.sh/shadcn1"
+            alt="Event cover"
+            className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
+          />}
+          <CardHeader>
+            <CardAction>
+              <Badge>{post.updatedAt.split('T')[0]}</Badge>
+            </CardAction>
+            <CardTitle>{post.title}</CardTitle>
+            {post.details && <CardDescription>{post.details}</CardDescription>}
+          </CardHeader>
+        </Card>
+      ))}
+    </ScrollArea>
   )
-}
+};
