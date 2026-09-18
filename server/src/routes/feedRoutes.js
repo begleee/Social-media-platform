@@ -4,6 +4,6 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.get("/feed", authMiddleware, getFeed);
+router.post("/feed", authMiddleware, getFeed);
 
 export default router;

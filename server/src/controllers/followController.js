@@ -4,6 +4,8 @@ const toggleFollow = async (req, res) => {
     const followerId = req.user.id;
     const { followingId } = req.params;
     try {
+        if(followerId === followingId) return res.status(400).json({ message: "You cant follow yourself"});
+        
         const follow = await prisma.follow.findUnique({
             where: {
                 followerId_followingId: {

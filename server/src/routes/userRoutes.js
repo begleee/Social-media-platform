@@ -5,7 +5,7 @@ import { authMiddleware, checkRole } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.get("/getusers", getUsers);
+router.get("/getusers", authMiddleware, getUsers);
 router.get("/me", authMiddleware, getMe);
 router.post("/update-user/:id", authMiddleware, updateUser)
 router.delete("/delete-user/:id", authMiddleware, checkRole(["ADMIN"]), deleteUser);

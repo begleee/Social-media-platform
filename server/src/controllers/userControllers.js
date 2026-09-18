@@ -1,8 +1,14 @@
 import { prisma } from "../../generated/lib/prisma.js";
 
 const getUsers = async (req, res) => {
+    const userId = req.params.id;
     try {
         const users = await prisma.user.findMany({
+            where: {
+                id: {
+                    not: userId
+                }
+            },
             select: {
                 id: true,
                 name: true,
