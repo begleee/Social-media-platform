@@ -9,15 +9,19 @@ import {
 } from "#components/ui/avatar";
 import { Spinner } from '#components/ui/spinner';
 import { PlusIcon } from 'lucide-react';
+import { Skeleton } from '#components/ui/skeleton';
 
 export default function FeedHead() {
     const { data, isLoading, isError } = useUsers();
     
     if(isLoading) return (
-        <Button disabled className="flex gap-2 items-center">
-            <p>Loading</p>
-            <Spinner data-icon="inline-start" />
-        </Button>
+        <div className="flex flex-wrap gap-2 items-center grayscale fixed">
+            <Skeleton className="h-10 w-10 rounded-full"/>
+            <Skeleton className="h-10 w-10 rounded-full"/>
+            <Skeleton className="h-10 w-10 rounded-full"/>
+            <Skeleton className="h-10 w-10 rounded-full"/>
+            <Skeleton className="h-10 w-10 rounded-full"/>
+        </div>
     );
 
     if(isError) return <p>Failed loading users.</p>;
