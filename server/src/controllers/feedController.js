@@ -11,6 +11,11 @@ const getFeed = async (req, res) => {
         const feedPromises = follows.map( async (follow) => {
             return await prisma.post.findMany({
                 where: { userId: follow.followingId },
+                include: {
+                    comments: true,
+                    likes: true,
+                    imageUrls: true
+                },
                 skip,
                 take: 2,
                 orderBy: { createdAt: "asc" }

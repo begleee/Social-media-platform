@@ -44,13 +44,13 @@ model Post {
   details String?
   userId String
   authorId User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  imageUrls ImageUrl[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   comments Comment[]
   likes Like[]
+  imageUrls ImageUrl[]
 }
 
 model Comment {
