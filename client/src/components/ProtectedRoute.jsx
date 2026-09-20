@@ -9,8 +9,10 @@ export default function ProtectedRoute() {
     const checkAuth = useAuthStore(state => state.checkAuth);
 
     useEffect(() => {
-        checkAuth();
-    }, [checkAuth]);
+        if(!user) {
+            checkAuth();
+        }
+    }, [user, checkAuth]);
 
     if(loading) {
         return <Spinner className='size-8'/>
