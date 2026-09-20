@@ -66,6 +66,23 @@ const getPost = async (req, res) => {
     }
 };
 
+const getMyPosts = async (req, res) => {
+    const userId = req.user.id;
+    try {
+        const posts = await prisma.post.findMany({
+            where: { userId }
+        })
+
+        res.status(200).json({ posts });
+
+    } catch (error) {
+        res.status(400).json({ 
+            message: "Couldnt get posts of user",
+            error: error.message
+        });
+    }
+}
+
 const updatePost = async (req, res) => {
     const postId = req.params.id;
     const userId = req.user.id;
@@ -155,4 +172,4 @@ const deletePost = async (req, res) => {
     }
 };
 
-export { createPost, getPost, updatePost, getUserPosts, deletePost };
+export { createPost, getPost, getMyPosts, updatePost, getUserPosts, deletePost };
