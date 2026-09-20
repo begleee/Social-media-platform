@@ -11,8 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "#components/ui/card";
-import { Badge } from "#components/ui/badge";
-import { Skeleton } from "#components/ui/skeleton";
 
 import {
   Carousel,
@@ -22,31 +20,8 @@ import {
   CarouselPrevious,
 } from "#components/ui/carousel";
 
-function CardSkeleton() {
-  return (
-    <Card className="relative mx-auto max-w-2xl pt-0">
-        <div className="relative aspect-video w-full overflow-hidden">
-          <Skeleton className="h-full w-full rounded-none" />
-          <div className="absolute inset-0 z-30 bg-black/35" />
-        </div>
-
-        <CardHeader>
-          <CardAction>
-            <Skeleton className="h-5 w-24" />
-          </CardAction>
-
-          <CardTitle className="pt-2">
-            <Skeleton className="h-7 w-3/4" />
-          </CardTitle>
-
-          <CardDescription className="space-y-2 pt-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-          </CardDescription>
-        </CardHeader>
-      </Card>
-  )
-}
+import { Badge } from "#components/ui/badge";
+import { CardSkeleton } from "../skeleton/CardSkeleton";
 
 
 export default function FeedContent() {
@@ -58,10 +33,12 @@ export default function FeedContent() {
     </ScrollArea>
   );
 
-  if(isError) return <p>Failed loading posts.</p>;
+  if(isError) return <p>Failed loading feed.</p>;
 
   return (
   <ScrollArea className="h-[50%] w-lg mt-20 z-10">
+    {(data.feed.length <= 0) && <p className="text-center">Follow somebody to see the posts.</p>}
+    
     {data?.feed?.map((post) => (
       <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>
         
@@ -94,7 +71,7 @@ export default function FeedContent() {
 
         <CardHeader className="relative z-10">
           <CardAction>
-            <Badge>{post.updatedAt.split('T')[0]}</Badge>
+            <Badge variant="ghost">{post.updatedAt.split('T')[0]}</Badge>
           </CardAction>
           <CardTitle>{post.title}</CardTitle>
           {post.details && <CardDescription>{post.details}</CardDescription>}

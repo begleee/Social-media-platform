@@ -12,9 +12,25 @@ import {
     SidebarMenuItem,
 } from "#components/ui/sidebar"
 
+import {
+    Avatar,
+    AvatarImage
+} from "#components/ui/avatar";
+import { useAuthStore } from "../store/authStore";
+
+const UserAvatar = () => {
+    const user = useAuthStore(state => state.user);
+    return (
+        <Avatar>
+            <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+        </Avatar>
+    )
+}
+
 const mainNavItems = [
     { icon: Home, label: "Feed", url: "/feed" },
-    { icon: PlusSquare, label: "Create post", url: "#" }
+    { icon: PlusSquare, label: "Create post", url: "#" },
+    { icon: UserAvatar, label: "Profile", url: "/profile"}
 ]
 
 export function AppSidebar({...props}) {

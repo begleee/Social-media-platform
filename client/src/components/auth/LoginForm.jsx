@@ -24,6 +24,7 @@ import { useNavigate } from "react-router"
 export function LoginForm({ className, ...props }) {
   const user = useAuthStore((state) => state.user);
   const login = useAuthStore((state) => state.login);
+  const loading = useAuthStore((state) => state.loading);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
@@ -74,7 +75,7 @@ export function LoginForm({ className, ...props }) {
               </Field>
 
               <Field>
-                <Button type="submit">Login</Button>
+                <Button disabled={loading} type="submit">Login</Button>
                 
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <a href="/register">Sign up</a>
