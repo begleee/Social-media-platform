@@ -29,7 +29,7 @@ const UserAvatar = () => {
 
 const mainNavItems = [
     { icon: Home, label: "Feed", url: "/feed" },
-    { icon: PlusSquare, label: "Create post", url: "#" },
+    { icon: PlusSquare, label: "Create post", url: "/create-post" },
     { icon: UserAvatar, label: "Profile", url: "/profile"}
 ]
 

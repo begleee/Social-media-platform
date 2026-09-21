@@ -19,11 +19,7 @@ export default function ProtectedRoute() {
     }
     
     return user ? (
-        <div className="min-h-screen">
-            <main className="mt-10">
-                <Outlet/>
-            </main>
-        </div>
+        <Outlet/>
     ) : (
         <Navigate to="/login"/>
     )

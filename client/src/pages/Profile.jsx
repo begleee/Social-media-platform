@@ -9,6 +9,7 @@ export default function Profile() {
       <Avatar className="w-24 h-24">
         <AvatarImage src={user.avatarUrl}/>
       </Avatar>
+      
     </div>
   )
 }

@@ -9,6 +9,7 @@ import Profile from './pages/Profile.jsx'
 import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import CreatePostPage from './pages/CreatePostPage.jsx'
 
 const router = createBrowserRouter([
     { path: "login", Component: Login },
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
           Component: ProtectedRoute,
           children: [
             { index: true, path: "feed", Component: Feed },
-            { path: "about", Component: About },
+            { path: "create-post", Component: CreatePostPage },
             { path: "profile", Component: Profile}
           ]
         }
