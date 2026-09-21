@@ -1,6 +1,7 @@
 import { ThemeProvider } from "#components/theme-provider"
 import { Outlet } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "#components/ui/toast";
 
 const queryCient = new QueryClient({
   defaultOptions: {
@@ -17,6 +18,7 @@ function App() {
       <QueryClientProvider client={queryCient}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <Outlet/>
+          <Toaster/>
         </ThemeProvider>
       </QueryClientProvider>
     </>

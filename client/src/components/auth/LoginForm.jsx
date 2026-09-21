@@ -1,31 +1,31 @@
-import { cn } from "cn"
+import { cn } from "cn";
+import { Button } from "#components/ui/button";
 
-import { Button } from "#components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "#components/ui/card"
+} from "#components/ui/card";
+
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "#components/ui/field"
-import { Input } from "#components/ui/input"
+} from "#components/ui/field";
 
+import { Input } from "#components/ui/input";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "../../store/authStore"
 import PasswordInput from "../PasswordInput"
 import { useNavigate } from "react-router"
 
 export function LoginForm({ className, ...props }) {
-  const user = useAuthStore((state) => state.user);
   const login = useAuthStore((state) => state.login);
   const loading = useAuthStore((state) => state.loading);
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit} = useForm();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
