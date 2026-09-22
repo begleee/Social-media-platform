@@ -1,17 +1,13 @@
-import { Button } from '@base-ui/react/button';
 import { useUsers } from '../../hooks/useUsers';
 
 import {
     Avatar,
     AvatarFallback,
-    AvatarGroup,
     AvatarGroupCount,
     AvatarImage
 } from "#components/ui/avatar";
 
-import { Spinner } from '#components/ui/spinner';
 import { PlusIcon } from 'lucide-react';
-import { Skeleton } from '#components/ui/skeleton';
 import { AvatarsSkeleton } from '../skeleton/AvatarsSkeleton';
 
 export default function FeedHead() {
