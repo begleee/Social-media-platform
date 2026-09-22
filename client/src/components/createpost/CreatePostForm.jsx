@@ -7,20 +7,47 @@ import { UploadCloud } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useCreatePost } from '../../hooks/usePosts'
 import { toast } from '#components/ui/toast'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export default function CreatePostForm() {
     const { mutate, isPending } = useCreatePost();
+    const [ previews, setPreviews ] = useState([]);
+
     const fileInputRef = useRef(null);
     const { register, handleSubmit, reset } = useForm();
 
-    const { ref: registerFileRef, ...photosRegister } = register("photos");
+    const { ref: registerRef, onChange: registerOnchange, ...registerRest } = register("images");
+
+    const handleFileChange = (e) => {
+        registerOnchange(e);
+        const files = e.target.files;
+
+        if(files) {
+            const newPreviews = [];
+            for(let i = 0; i < files.length; i++) {
+                const objecUrl = URL.createObjectURL(files[i]);
+                newPreviews.push(objecUrl);
+            }
+            setPreviews(prev => [...prev, ...newPreviews]);
+        }
+    };
 
     const onSubmit = handleSubmit(async (data) => {
-        mutate(data, {
+        const formData = new FormData();
+        formData.append("title", data.title);
+        formData.append("details", data.details);
+
+        if(data.images && data.images.length > 0) {
+            for(let i = 0; i < data.images.length; i++) {
+                formData.append("images", data.images[i]);
+            };
+        }
+
+        mutate(formData, {
             onSuccess: () => {
                 reset();
                 toast.add({ description: "Post has been created." });
+                setPreviews([]);
             },
             onError: (err) => {
                 toast.add({ description: err.message });
@@ -46,27 +73,35 @@ export default function CreatePostForm() {
                     <Field>
                         <FieldLabel 
                             onClick={() => fileInputRef.current?.click()}
-                            htmlFor="photos" 
+                            htmlFor="images" 
                             className="
                             flex flex-col 
                             border-2 border-dashed rounded-xl 
                             p-8 text-center cursor-pointer transition-all
                             hover:bg-secondary"
                         >
-                            <p>Choose the photos you'd like to post</p>
+                            <p>Choose the images you'd like to post</p>
                             <UploadCloud/> 
                         </FieldLabel>
-                        <Input 
-                            {...photosRegister}
-                            {...register("photos")}
+                        <input
+                            {...registerRest}
                             type="file"
                             multiple
                             className="hidden"
-                            ref={(e) => {
-                                registerFileRef(e);
-                                fileInputRef.current = e;
-                            }}
+                            id="images"
+                            ref={registerRef}
+                            onChange={handleFileChange}
                         />
+                        <div className='flex gap-3'>
+                            {previews && previews.map((preview, index) => (
+                                <img 
+                                    key={index}
+                                    src={preview} 
+                                    alt="Preview" 
+                                    className='max-w-32'
+                                />
+                            ))}
+                        </div>
                     </Field>
                     <Field>
                         <Button disabled={isPending} type="submit">Post</Button>

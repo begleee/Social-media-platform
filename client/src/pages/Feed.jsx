@@ -1,5 +1,3 @@
-import React from 'react'
-import { useUsers } from '../hooks/useUsers'
 import FeedHead from '../components/feed/FeedHead';
 import FeedContent from '../components/feed/FeedContent';
 

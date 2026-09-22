@@ -1,13 +1,10 @@
 import { ScrollArea } from "#components/ui/scroll-area";
-import { Button } from "#components/ui/button";
-import { Spinner } from "#components/ui/spinner";
 import { useFeed } from "../../hooks/useFeed";
 
 import {
   Card,
   CardAction,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "#components/ui/card";

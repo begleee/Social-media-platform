@@ -4,8 +4,12 @@ import { api } from "../services/api";
 function useCreatePost() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ title, details, imageUrls}) => 
-            api.post("/create-post", { title, details, imageUrls }).then(res => res.data),
+        mutationFn: (formData) => 
+            api.post("/create-post", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }).then(res => res.data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['myPosts'] });
         }

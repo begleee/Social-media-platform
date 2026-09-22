@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAuthStore } from '../store/authStore'
 import { Avatar, AvatarImage } from '#components/ui/avatar';
 
