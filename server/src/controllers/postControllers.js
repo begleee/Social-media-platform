@@ -70,8 +70,11 @@ const getMyPosts = async (req, res) => {
     const userId = req.user.id;
     try {
         const posts = await prisma.post.findMany({
-            where: { userId }
-        })
+            where: { userId },
+            include: { 
+                imageUrls: true
+            }
+        });
 
         res.status(200).json({ posts });
 
