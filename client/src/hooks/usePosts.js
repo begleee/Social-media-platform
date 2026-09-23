@@ -23,4 +23,12 @@ function useGetMyPosts() {
     });
 };
 
-export { useCreatePost, useGetMyPosts };
+function useGetPost(postId) {
+    return useQuery({
+        queryKey: ['posts', postId],
+        queryFn: () => api.get(`/get-post/${postId}`).then(res => res.data),
+        enabled: !!postId
+    })
+}
+
+export { useCreatePost, useGetMyPosts, useGetPost };

@@ -3,6 +3,7 @@ import { Skeleton } from "#components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "#components/ui/alert";
 import { AspectRatio } from "#components/ui/aspect-ratio";
 import { AlertCircle, ImageOff } from "lucide-react";
+import { Link } from "react-router";
 
 export default function UserPosts() {
   const { data, isLoading, isError } = useGetMyPosts();
@@ -66,12 +67,14 @@ export default function UserPosts() {
                         >
                             <AspectRatio ratio={1 / 1}>
                             {firstImageUrl ? (
-                                <img
-                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                src={firstImageUrl}
-                                alt={post.title || "User post"}
-                                loading="lazy"
-                                />
+                                <Link to={`/posts/${post.id}`}>
+                                    <img
+                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    src={firstImageUrl}
+                                    alt={post.title || "User post"}
+                                    loading="lazy"
+                                    />
+                                </Link>
                             ) : (
                                 <div className="flex h-full w-full flex-col items-center justify-center bg-muted/40 p-2 text-center text-xs text-muted-foreground">
                                 <ImageOff className="mb-1 h-4 w-4 opacity-50" />

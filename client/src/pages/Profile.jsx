@@ -9,6 +9,7 @@ export default function Profile() {
       <Avatar className="w-24 h-24">
         <AvatarImage src={user.avatarUrl}/>
       </Avatar>
+      <h1 className="mt-5">Posts</h1>
       <UserPosts/>
     </div>
   )
