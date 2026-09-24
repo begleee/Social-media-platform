@@ -12,8 +12,12 @@ const getFeed = async (req, res) => {
             return await prisma.post.findMany({
                 where: { userId: follow.followingId },
                 include: {
-                    comments: true,
-                    likes: true,
+                    authorId: {
+                        select: { id: true, name: true, avatarUrl: true}
+                    },
+                    _count: {
+                        select: { likes: true, comments: true }
+                    },
                     imageUrls: true
                 },
                 skip,

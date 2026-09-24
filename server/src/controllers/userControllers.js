@@ -1,14 +1,10 @@
 import { prisma } from "../../generated/lib/prisma.js";
 
-const getUsers = async (req, res) => {
+const getUser = async (req, res) => {
     const userId = req.params.id;
     try {
-        const users = await prisma.user.findMany({
-            where: {
-                id: {
-                    not: userId
-                }
-            },
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
             select: {
                 id: true,
                 name: true,
@@ -16,11 +12,11 @@ const getUsers = async (req, res) => {
             }
         });
 
-        res.status(200).json({ users });
+        res.status(200).json({ user });
 
     } catch (error) {
         res.status(500).json({
-            message: "Couldnt get users",
+            message: "Couldnt get user",
             details: error.message
         });
     };
@@ -114,4 +110,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-export { getUsers, getMe, updateUser, deleteUser };
+export { getUser, getMe, updateUser, deleteUser };

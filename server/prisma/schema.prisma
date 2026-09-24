@@ -43,6 +43,7 @@ model Post {
   title String
   details String?
   userId String
+  // FIXME: rename authorId field to author field
   authorId User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
