@@ -53,7 +53,16 @@ const getPost = async (req, res) => {
     const postId = req.params.id;
     try {
         const post = await prisma.post.findUnique({
-            where: {id: postId }
+            where: { id: postId },
+            include: {
+                imageUrls: true,
+                _count: {
+                    select: { 
+                        likes: true,
+                        comments: true
+                    }
+                }
+            }
         });
 
         if(!post) {
