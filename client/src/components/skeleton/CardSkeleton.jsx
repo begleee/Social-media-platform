@@ -2,7 +2,6 @@ import {
   Card,
   CardAction,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "#components/ui/card";
@@ -33,4 +32,4 @@ export function CardSkeleton() {
         </CardHeader>
       </Card>
   )
-}
+};

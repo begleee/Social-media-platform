@@ -66,21 +66,23 @@ export default function UserPosts() {
                             className="group relative overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md hover:border-muted-foreground/30"
                         >
                             <AspectRatio ratio={1 / 1}>
-                            {firstImageUrl ? (
-                                <Link to={`/posts/${post.id}`}>
-                                    <img
-                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    src={firstImageUrl}
-                                    alt={post.title || "User post"}
-                                    loading="lazy"
-                                    />
-                                </Link>
-                            ) : (
-                                <div className="flex h-full w-full flex-col items-center justify-center bg-muted/40 p-2 text-center text-xs text-muted-foreground">
-                                <ImageOff className="mb-1 h-4 w-4 opacity-50" />
-                                <span>No Image</span>
-                                </div>
-                            )}
+                                {firstImageUrl ? (
+                                    <Link to={`/posts/${post.id}`}>
+                                        <img
+                                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            src={firstImageUrl}
+                                            alt={post.title || "User post"}
+                                            loading="lazy"
+                                        />
+                                    </Link>
+                                ) : (
+                                    <div className="h-full w-full bg-muted/40 p-2 text-center text-xs text-muted-foreground">
+                                        <Link className="flex h-full w-full flex-col items-center justify-center " to={`/posts/${post.id}`}>
+                                            <ImageOff className="mb-1 h-4 w-4 opacity-50" />
+                                            <span>No Image</span>
+                                        </Link>
+                                    </div>
+                                )}
                             </AspectRatio>
                         </div>
                     );

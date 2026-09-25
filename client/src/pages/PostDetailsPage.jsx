@@ -1,52 +1,38 @@
 import { useParams } from "react-router"
 import { useGetPost } from "../hooks/usePosts";
-import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "#components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "#components/ui/carousel";
-import { Badge } from "#components/ui/badge";
-import { Skeleton } from "#components/ui/skeleton";
+import Post from "../components/post_details/Post";
+import Head from "../components/Head";
+import { Separator } from "#components/ui/separator";
+import PostSkeleton from "../components/post_details/PostSkeleton";
 
 export default function PostDetailsPage() {
     const { postId } = useParams();
     const { data, isLoading, isError } = useGetPost(postId);
-    const post = data.post;
-    
+
+    if(isLoading) {
+        return (
+            <div className="flex flex-col gap-4 w-screen px-5 h-full">
+            <Head title="Post details"/>
+            <Separator/>
+            <PostSkeleton/>
+        </div>
+        )
+    }
+
+    if(isError) {
+        return (
+            <p>Something went wrong, please check your network</p>
+        )
+    }
+
+    const { post } = data;
+    console.log(post);
+
     return (
-        <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>
-            <div className="relative aspect-video w-full">
-            <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
-
-                {post.imageUrls && post.imageUrls.length > 0 && (
-                <Carousel className="w-full h-full">
-                    <CarouselContent className="ml-0 h-full">
-                    {post.imageUrls.map((image) => (
-                        <CarouselItem key={image.id} className="pl-0 h-full">
-                        <img 
-                            src={image.url} 
-                            alt="" 
-                            className="w-full h-full object-cover"
-                        />
-                        </CarouselItem>
-                    ))}
-                    </CarouselContent>
-                    
-                    {post.imageUrls.length > 1 && (
-                    <>
-                        <CarouselPrevious className="absolute left-4 top-1/2 z-30" />
-                        <CarouselNext className="absolute right-4 top-1/2 z-30" />
-                    </>
-                    )}
-                </Carousel>
-                )}
-            </div>
-
-            <CardHeader className="relative z-10">
-                <CardAction>
-                <Badge variant="ghost">{post.updatedAt.split('T')[0]}</Badge>
-                </CardAction>
-                <CardTitle>{post.title}</CardTitle>
-                {post.details && <CardDescription>{post.details}</CardDescription>}
-            </CardHeader>
-
-        </Card>
-    )
-};
+        <div className="flex flex-col gap-4 w-screen px-5 h-full">
+            <Head title="Post details"/>
+            <Separator/>
+            <Post post={post}/>
+        </div>
+    ) 
+}
