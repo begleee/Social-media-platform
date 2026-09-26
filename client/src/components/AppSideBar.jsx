@@ -1,4 +1,4 @@
-import { Home, PlusSquare, Menu } from "lucide-react";
+import { Home, LogOut, PlusSquare } from "lucide-react";
 
 import {
     Sidebar,
@@ -6,7 +6,6 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -17,6 +16,7 @@ import {
     AvatarImage
 } from "#components/ui/avatar";
 import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router";
 
 const UserAvatar = () => {
     const user = useAuthStore(state => state.user);
@@ -34,6 +34,14 @@ const mainNavItems = [
 ]
 
 export function AppSidebar({...props}) {
+    const logout = useAuthStore(state => state.logout);
+    const navigate = useNavigate();
+
+    function handleLogout() {
+        logout();
+        navigate("/login");
+    }
+
     return (
         <Sidebar collapsible="icon" className="border-r border-zinc-800 bg-black text-white" {...props}>
             <SidebarContent className="flex flex-col justify-between py-6">
@@ -45,10 +53,10 @@ export function AppSidebar({...props}) {
                                     <SidebarMenuButton
                                         render={
                                             <a href={item.url} className="flex items-center gap-4">
-                                            <item.icon className="h-20 w-20 stroke-2" />
-                                            <span className="text-sm font-medium tracking-wide group-data-[collapsible=icon]:hidden">
-                                                {item.label}
-                                            </span>
+                                                <item.icon className="h-20 w-20 stroke-2" />
+                                                <span className="text-sm font-medium tracking-wide group-data-[collapsible=icon]:hidden">
+                                                    {item.label}
+                                                </span>
                                             </a>
                                         }
                                         tooltip={item.label}
@@ -60,6 +68,24 @@ export function AppSidebar({...props}) {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <SidebarFooter>
+                <SidebarContent>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    onClick={handleLogout}
+                                    render={
+                                        <LogOut color="#f7584d"/>
+                                    }
+                                    tooltip="logout"
+                                />
+
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarContent>
+            </SidebarFooter>
         </Sidebar>
     )
-}
+};
