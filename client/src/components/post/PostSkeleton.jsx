@@ -8,10 +8,8 @@ export default function PostSkeleton() {
     return (
         <Card className="relative mx-auto max-w-xl pt-0 overflow-hidden">
             <div className="relative aspect-video w-full">
-            <Skeleton className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
-                <Skeleton className="w-xl h-xl">
-                    
-                </Skeleton>
+                <Skeleton className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
+                <Skeleton className="w-xl h-xl"/>
             </div>
 
             <CardHeader className="relative z-10">
@@ -33,7 +31,6 @@ export default function PostSkeleton() {
                     </div>
                 </CardDescription>
             </CardHeader>
-
         </Card>
     )
 }

@@ -21,10 +21,10 @@ const router = createBrowserRouter([
       { 
         Component: ProtectedRoute,
         children: [
-          { path: "feed", Component: Feed },
+          { path: "feed", Component: Feed, index: true },
           { path: "create-post", Component: CreatePostPage },
           { path: "profile", Component: Profile },
-          { path: "posts/:postId", Component: PostDetailsPage }
+          { path: "profile/:postId", Component: PostDetailsPage }
         ]
       }
     ]

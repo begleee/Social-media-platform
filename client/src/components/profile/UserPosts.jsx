@@ -11,9 +11,9 @@ export default function UserPosts() {
     if (isLoading) {
         return (
             <div className="w-full max-w-6xl mx-auto p-6">
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                <div className="grid grid-cols-3 sm:grid-cols-4">
                     {[...Array(8)].map((_, i) => (
-                    <div key={i} className="w-full overflow-hidden rounded-xl border bg-card">
+                    <div key={i} className="w-full overflow-hidden border bg-card">
                         <AspectRatio ratio={1 / 1} className="w-full">
                         <Skeleton className="w-52" />
                         </AspectRatio>
@@ -31,7 +31,7 @@ export default function UserPosts() {
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                    Failed to load user posts. Please try refreshing the page.
+                        Failed to load user posts. Please try refreshing the page.
                     </AlertDescription>
                 </Alert>
             </div>
@@ -55,19 +55,19 @@ export default function UserPosts() {
     }
 
     return (
-        <div className="p-6 flex items-center justify-center">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        <div className="w-full max-w-6xl mx-auto">
+            <div className="grid grid-cols-3 sm:grid-cols-4">
                 {posts.map((post) => {
                     const firstImageUrl = post.imageUrls?.[0]?.url;
 
                     return (
                         <div
                             key={post.id || firstImageUrl}
-                            className="group relative overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md hover:border-muted-foreground/30"
+                            className="group relative overflow-hidden border bg-card shadow-sm transition-all duration-200 hover:shadow-md hover:border-muted-foreground/30"
                         >
                             <AspectRatio ratio={1 / 1}>
                                 {firstImageUrl ? (
-                                    <Link to={`/posts/${post.id}`}>
+                                    <Link to={post.id}>
                                         <img
                                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             src={firstImageUrl}
@@ -77,7 +77,7 @@ export default function UserPosts() {
                                     </Link>
                                 ) : (
                                     <div className="h-full w-full bg-muted/40 p-2 text-center text-xs text-muted-foreground">
-                                        <Link className="flex h-full w-full flex-col items-center justify-center " to={`/posts/${post.id}`}>
+                                        <Link className="flex h-full w-full flex-col items-center justify-center " to={post.id}>
                                             <ImageOff className="mb-1 h-4 w-4 opacity-50" />
                                             <span>No Image</span>
                                         </Link>
