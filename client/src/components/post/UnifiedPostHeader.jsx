@@ -5,7 +5,7 @@ export default function UnifiedPostHeader({ name, avatarUrl }) {
     return (
         <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">
-                <Avatar>
+                <Avatar size="lg">
                     <AvatarImage src={avatarUrl}/>
                 </Avatar>
                 <p>{name}</p>

@@ -1,6 +1,6 @@
 import { useLocation, useParams } from "react-router"
 import { useGetPost } from "../hooks/usePosts";
-import Post from "../components/post/Post";
+import UnifiedPostCard from "../components/post/UnifiedPostCard";
 import Head from "../components/Head";
 import PostSkeleton from "../components/post/PostSkeleton";
 
@@ -36,7 +36,8 @@ export default function PostDetailsPage() {
     return (
         <div className="flex flex-col gap-4 w-screen px-5 h-full">
             <Head/>
-            <Post post={post}/>
+            {/* <Post post={post}/> */}
+            <UnifiedPostCard post={post}/>
         </div>
     ) 
 };
