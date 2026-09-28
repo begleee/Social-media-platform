@@ -56,6 +56,9 @@ const getPost = async (req, res) => {
             where: { id: postId },
             include: {
                 imageUrls: true,
+                authorId: {
+                    select: { id: true, name: true, avatarUrl: true}
+                },
                 _count: {
                     select: { 
                         likes: true,
@@ -82,6 +85,9 @@ const getMyPosts = async (req, res) => {
             where: { userId },
             include: { 
                 imageUrls: true,
+                authorId: {
+                    select: { id: true, name: true, avatarUrl: true}
+                },
                 _count: {
                     select: {
                         likes: true,
