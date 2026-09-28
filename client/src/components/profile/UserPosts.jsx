@@ -67,7 +67,7 @@ export default function UserPosts() {
                         >
                             <AspectRatio ratio={1 / 1}>
                                 {firstImageUrl ? (
-                                    <Link to={post.id}>
+                                    <Link to={post.id} state={{ post }}>
                                         <img
                                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             src={firstImageUrl}
@@ -77,7 +77,7 @@ export default function UserPosts() {
                                     </Link>
                                 ) : (
                                     <div className="h-full w-full bg-muted/40 p-2 text-center text-xs text-muted-foreground">
-                                        <Link className="flex h-full w-full flex-col items-center justify-center " to={post.id}>
+                                        <Link className="flex h-full w-full flex-col items-center justify-center" to={post.id} state={{post}}>
                                             <ImageOff className="mb-1 h-4 w-4 opacity-50" />
                                             <span>No Image</span>
                                         </Link>

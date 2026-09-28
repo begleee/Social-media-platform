@@ -4,23 +4,8 @@ import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "#compo
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "#components/ui/carousel";
 import { Skeleton } from "#components/ui/skeleton";
 import { Heart, ImageOff, MessageCircle } from "lucide-react";
-import PostSkeleton from "./PostSkeleton";
 
-export default function Post({ data, isLoading, isError }) {
-
-    if(isLoading) {
-        return (
-            <PostSkeleton/>
-        )
-    }
-
-    if(isError) {
-        return (
-            <p>Something went wrong, please check your network</p>
-        )
-    }
-
-    const { post } = data;
+export default function Post({ post }) {
 
     return (
         <Card className="relative mx-auto max-w-xl pt-0 overflow-hidden">
