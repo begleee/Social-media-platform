@@ -5,10 +5,10 @@ function useCreatePost() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (formData) => 
-            api.post("/create-post", formData, {
+            api.post("/create-post", formData, { 
                 headers: {
-                    "Content-Type": "multipart/form-data"
-                }
+                    "Content-Type": "multipart/form-data",
+                },
             }).then(res => res.data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['myPosts'] });

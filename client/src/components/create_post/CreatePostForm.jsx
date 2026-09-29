@@ -3,51 +3,67 @@ import { Card, CardContent } from '#components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '#components/ui/field'
 import { Input } from '#components/ui/input'
 import { Textarea } from '#components/ui/textarea'
-import { UploadCloud } from 'lucide-react'
+import { UploadCloud, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useCreatePost } from '../../hooks/usePosts'
 import { toast } from '#components/ui/toast'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function CreatePostForm() {
     const { mutate, isPending } = useCreatePost();
+    const [ selectedFiles, setSelectedFiles ] = useState([]);
     const [ previews, setPreviews ] = useState([]);
 
     const fileInputRef = useRef(null);
     const { register, handleSubmit, reset } = useForm();
 
-    const { ref: registerRef, onChange: registerOnchange, ...registerRest } = register("images");
 
     const handleFileChange = (e) => {
-        registerOnchange(e);
-        const files = e.target.files;
+        const files = Array.from(e.target.files || []);
+        if(!files.length) return;
 
-        if(files) {
-            const newPreviews = [];
-            for(let i = 0; i < files.length; i++) {
-                const objecUrl = URL.createObjectURL(files[i]);
-                newPreviews.push(objecUrl);
-            }
-            setPreviews(prev => [...prev, ...newPreviews]);
+        const newPreviewUrls = files.map((file) => URL.createObjectURL(file));
+
+        setSelectedFiles((prev) => [...prev, ...files]);
+        setPreviews((prev) => [...prev, ...newPreviewUrls]);
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
         }
     };
+
+    const removeImage = (index) => {
+        URL.revokeObjectURL(previews[index]);
+        setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+        setPreviews((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const cleanupPreviews = () => {
+        previews.forEach((url) => URL.revokeObjectURL(url));
+        setSelectedFiles([]);
+        setPreviews([]);
+    };
+
+    useEffect(() => {
+        return () => {
+            previews.forEach((url) => URL.revokeObjectURL(url))
+        }
+    }, [previews]);
 
     const onSubmit = handleSubmit(async (data) => {
         const formData = new FormData();
         formData.append("title", data.title);
         formData.append("details", data.details);
 
-        if(data.images && data.images.length > 0) {
-            for(let i = 0; i < data.images.length; i++) {
-                formData.append("images", data.images[i]);
-            };
-        }
+        selectedFiles.forEach((file) => {
+            formData.append("images", file);
+        });
 
         mutate(formData, {
             onSuccess: () => {
                 reset();
+                cleanupPreviews();
                 toast.add({ description: "Post has been created." });
-                setPreviews([]);
             },
             onError: (err) => {
                 toast.add({ description: err.message });
@@ -84,24 +100,32 @@ export default function CreatePostForm() {
                             <UploadCloud/> 
                         </FieldLabel>
                         <input
-                            {...registerRest}
                             type="file"
                             multiple
                             className="hidden"
                             id="images"
-                            ref={registerRef}
                             onChange={handleFileChange}
                         />
-                        <div className='flex gap-3'>
-                            {previews && previews.map((preview, index) => (
-                                <img 
-                                    key={index}
-                                    src={preview} 
-                                    alt="Preview" 
-                                    className='max-w-32'
-                                />
-                            ))}
-                        </div>
+                        {previews.length > 0 && (
+                            <div className='flex gap-3'>
+                                {previews.map((preview, index) => (
+                                    <div key={index} className="relative group rounded-lg overflow-hidden border">
+                                        <img 
+                                            src={preview} 
+                                            alt={`Preview ${index + 1}`} 
+                                            className="w-24 h-24 object-cover"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeImage(index)}
+                                            className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-80 hover:opacity-100"
+                                        >
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </Field>
                     <Field>
                         <Button disabled={isPending} type="submit">Post</Button>
