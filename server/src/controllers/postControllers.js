@@ -1,44 +1,38 @@
 import { prisma } from "../../generated/lib/prisma.js";
-import { generateFileBase64Url } from "../utils/generateFileBase64Url.js";
+import { generateFileBase64Url, streamUpload } from "../utils/filesUtils.js";
 import { v2 as cloudinary } from "cloudinary";
 
 const createPost = async (req, res) => {
     const { title, details } = req.body;
     const userId = req.user.id;
     try {
-        const newPost = await prisma.post.create({
-            data: { title, details, userId }
-        });
-
-        const fileUrls = req.files && req.files.length > 0
-            ? req.files.map(file => generateFileBase64Url(file.buffer, file.mimetype))
-            : [];
-        
-        const resultPromises = fileUrls.map(async url => {
-            return await cloudinary.uploader.upload(url, {
-                folder: "post_photos",
-                resource_type: "auto"
-            });
-        });
-
-        const uploadResults = await Promise.all(resultPromises);
-
-        const imagePromises = uploadResults.map(upload => 
-            prisma.imageUrl.create({
-                data: {
-                    id: upload.public_id,
-                    url: upload.secure_url,
-                    postId: newPost.id
-                }
-            })
+        const files = req.files || [];
+        const uploadResults = await Promise.all(
+            files.map((file) => streamUpload(file.buffer))
         );
 
-        const savedImages = await Promise.all(imagePromises);
+        const imageRecords = uploadResults.map((upload) => ({
+            id: upload.public_id,
+            url: upload.secure_url || upload.url
+        }));
+
+        const newPost = await prisma.post.create({
+            data: {
+                title,
+                details,
+                userId,
+                imageUrls: {
+                    create: imageRecords
+                }
+            },
+            include: {
+                imageUrls: true
+            }
+        });
 
         res.status(201).json({
             message: "Post created successfully",
-            newPost,
-            images: savedImages
+            newPost
         });
 
     } catch (error) {

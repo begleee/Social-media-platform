@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import { generateFileBase64Url } from "../utils/generateFileBase64Url.js";
+import { generateFileBase64Url } from "../utils/filesUtils.js";
 import { prisma } from "../../generated/lib/prisma.js";
 
 const uploadUserAvatar = async (req, res) => {
