@@ -2,14 +2,14 @@ import { Badge } from "#components/ui/badge";
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "#components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "#components/ui/carousel";
 import { ImageOff } from "lucide-react";
-import UnifiedPostActions from "./UnifiedPostActions";
-import UnifiedPostHeader from "./UnifiedPostHeader";
+import PostActions from "./PostActions";
+import PostHeader from "./PostHeader";
 import { Skeleton } from "#components/ui/skeleton";
 
-export default function UnifiedPostCard({ post }) {
+export default function PostCard({ post }) {
     return (
         <div className="flex flex-col mx-auto max-w-2xl gap-2">
-            <UnifiedPostHeader name={post.authorId.name} avatarUrl={post.authorId.avatarUrl}/>
+            <PostHeader name={post.authorId.name} avatarUrl={post.authorId.avatarUrl}/>
             <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>        
                 <div className="relative aspect-video w-full">
                     <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
@@ -52,7 +52,7 @@ export default function UnifiedPostCard({ post }) {
                     </CardAction>
                     <CardTitle>{post.title}</CardTitle>
                     {post.details && <CardDescription>{post.details}</CardDescription>}
-                    <UnifiedPostActions likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
+                    <PostActions likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
                 </CardHeader>
 
             </Card>

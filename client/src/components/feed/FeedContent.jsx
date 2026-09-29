@@ -1,9 +1,8 @@
 import { ScrollArea } from "#components/ui/scroll-area";
 import { useFeed } from "../../hooks/useFeed";
+import PostCard from "../post/PostCard";
 
 import { CardSkeleton } from "../skeleton/CardSkeleton";
-import PostCard from "./PostCard";
-import PostHeader from "./PostHeader";
 
 export default function FeedContent() {
     const { data, isLoading, isError } = useFeed();
@@ -21,10 +20,7 @@ export default function FeedContent() {
             {(data.feed.length <= 0) && <p className="text-center">Follow somebody to see the posts.</p>}
 
             {data?.feed?.map((post) => (
-                <div key={post.id} className="flex flex-col gap-2">
-                    <PostHeader userId={post.userId}/>
-                    <PostCard post={post}/>
-                </div>
+                <PostCard key={post.id} post={post}/>
             ))}
         </ScrollArea>
     )
