@@ -52,7 +52,7 @@ export default function PostCard({ post }) {
                     </CardAction>
                     <CardTitle>{post.title}</CardTitle>
                     {post.details && <CardDescription>{post.details}</CardDescription>}
-                    <PostActions likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
+                    <PostActions isLiked={post.likes.length > 0} postId={post.id} likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
                 </CardHeader>
 
             </Card>
