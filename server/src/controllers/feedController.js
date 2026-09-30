@@ -18,7 +18,15 @@ const getFeed = async (req, res) => {
                     _count: {
                         select: { likes: true, comments: true }
                     },
-                    imageUrls: true
+                    imageUrls: true,
+                    likes: {
+                        where: {
+                            userId
+                        },
+                        select: {
+                            userId: true
+                        }
+                    }
                 },
                 skip,
                 take: 2,
