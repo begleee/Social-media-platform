@@ -8,7 +8,7 @@ function useTogglePost(postId) {
         mutationFn: () => 
             api.post(`/like-post/${postId}`).then(res => res.data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.invalidateQueries({ queryKey: ['myPosts'] });
         }
     });
 };

@@ -11,7 +11,7 @@ export const useAuthStore = create(
             try {
                 const response = await api.get("/me");
                 set({ user: response.data.user, loading: false});
-            } catch (error) {
+            } catch {
                 set({ user: null, loading: false});
             }
         },
@@ -19,7 +19,7 @@ export const useAuthStore = create(
         register: async (name, email, password) => {
             set({ loading: true });
             try {
-                const response = await api.post("/register", { name, email, password });
+                await api.post("/register", { name, email, password });
                 set({ loading: false });
                 return { success: true };
             } catch (error) {
@@ -42,7 +42,7 @@ export const useAuthStore = create(
 
         logout: async () => {
             try {
-                const response = await api.post("/logout");
+                await api.post("/logout");
             } catch (error) {
                 return ({ success: false, error: error, message: "Logout failed" });
             } finally {
