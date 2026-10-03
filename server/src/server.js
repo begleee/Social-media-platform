@@ -12,6 +12,7 @@ import commentRoutes from "./routes/commentRoutes.js";
 import followRoutes from "./routes/followRoutes.js";
 import feedRoutes from "./routes/feedRoutes.js";
 import imageRoutes from "./routes/imageRoutes.js";
+import suggestionRoutes from "./routes/suggestionRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use("/", commentRoutes);
 app.use("/", followRoutes);
 app.use("/", feedRoutes);
 app.use("/", imageRoutes);
+app.use("/", suggestionRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -58,6 +58,14 @@ const getPost = async (req, res) => {
                         likes: true,
                         comments: true
                     }
+                },
+                likes: {
+                    where: {
+                        userId
+                    },
+                    select: {
+                        userId: true
+                    }
                 }
             }
         });
@@ -87,7 +95,15 @@ const getMyPosts = async (req, res) => {
                         likes: true,
                         comments: true
                     }
-                }
+                },
+                likes: {
+                        where: {
+                            userId
+                        },
+                        select: {
+                            userId: true
+                        }
+                    }
             }
         });
 
