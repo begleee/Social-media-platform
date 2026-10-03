@@ -3,7 +3,7 @@ import { api } from "../services/api";
 
 function useGetSuggestions() {
     return useQuery({
-        queryKey: ['myPosts'],
+        queryKey: ['suggestions'],
         queryFn: () => api.get("/suggestions").then(res => res.data)
     });
 };

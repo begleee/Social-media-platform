@@ -22,9 +22,9 @@ import PasswordInput from "../PasswordInput"
 import { useNavigate } from "react-router"
 
 export function RegisterForm({ className, ...props }) {
-  const user = useAuthStore((state) => state.user);
   const registerRoute = useAuthStore((state) => state.register);
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const loading = useAuthStore((state) => state.loading);
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -80,7 +80,7 @@ export function RegisterForm({ className, ...props }) {
                         </Field>
 
                         <Field>
-                            <Button type="submit">Sign up</Button>
+                            <Button disabled={loading} type="submit">Sign up</Button>
 
                             <FieldDescription className="text-center">
                                 Have an account already? <a href="/login">Log in</a>
