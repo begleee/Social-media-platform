@@ -27,7 +27,16 @@ const getMe = async (req, res) => {
     try {
         
         const user = await prisma.user.findUnique({
-            where: { id: userId }
+            where: { id: userId },
+            include: {
+                _count: {
+                    select: {
+                        posts: true,
+                        followers: true,
+                        followings: true
+                    }
+                }
+            }
         });
 
         res.status(200).json({
@@ -35,7 +44,11 @@ const getMe = async (req, res) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                avatarUrl: user.avatarUrl
+                avatarUrl: user.avatarUrl,
+                postsCount: user._count.posts,
+                //change followers and following name on migration
+                followingsCount: user._count.followers,
+                followersCount: user._count.followings
             }
         });
 
