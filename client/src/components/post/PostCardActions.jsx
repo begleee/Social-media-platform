@@ -16,6 +16,7 @@ export default function PostCardActions({ postId, likesCount, commentsCount, isL
         
         toggleLikeMutate(postId, {
             onError: (err) => {
+                setIsLikedState(prev => !prev);
                 toast.add({ description: err.message });
             }
         });
