@@ -45,6 +45,7 @@ const createPost = async (req, res) => {
 
 const getPost = async (req, res) => {
     const postId = req.params.id;
+    const userId = req.user.id;
     try {
         const post = await prisma.post.findUnique({
             where: { id: postId },
@@ -97,13 +98,13 @@ const getMyPosts = async (req, res) => {
                     }
                 },
                 likes: {
-                        where: {
-                            userId
-                        },
-                        select: {
-                            userId: true
-                        }
+                    where: {
+                        userId
+                    },
+                    select: {
+                        userId: true
                     }
+                }
             }
         });
 
