@@ -2,14 +2,14 @@ import { Badge } from "#components/ui/badge";
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "#components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "#components/ui/carousel";
 import { ImageOff } from "lucide-react";
-import PostActions from "./PostActions";
-import PostHeader from "./PostHeader";
+import PostCardActions from "./PostCardActions";
+import PostCardHeader from "./PostCardHeader";
 import { Skeleton } from "#components/ui/skeleton";
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, isFollowed }) {
     return (
         <div className="flex flex-col mx-auto max-w-2xl gap-2">
-            <PostHeader name={post.authorId.name} avatarUrl={post.authorId.avatarUrl}/>
+            <PostCardHeader userId={post.authorId.id} isFollowed={isFollowed} name={post.authorId.name} avatarUrl={post.authorId.avatarUrl}/>
             <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>        
                 <div className="relative aspect-video w-full">
                     <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
@@ -52,11 +52,10 @@ export default function PostCard({ post }) {
                     </CardAction>
                     <CardTitle>{post.title}</CardTitle>
                     {post.details && <CardDescription>{post.details}</CardDescription>}
-                    <PostActions isLiked={post.likes.length > 0} postId={post.id} likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
+                    <PostCardActions isLiked={post.likes.length > 0} postId={post.id} likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
                 </CardHeader>
 
             </Card>
         </div>
-        
     )
 };

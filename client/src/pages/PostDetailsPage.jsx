@@ -2,7 +2,7 @@ import { useLocation, useParams } from "react-router"
 import { useGetPost } from "../hooks/usePosts";
 import PostCard from "../components/post/PostCard";
 import Head from "../components/Head";
-import PostSkeleton from "../components/post/PostSkeleton";
+import PostCardSkeleton from "../components/post/PostCardSkeleton";
 
 export default function PostDetailsPage() {
     const { postId } = useParams();
@@ -10,14 +10,14 @@ export default function PostDetailsPage() {
 
     const initialPost = location.state?.post;
     const { data, isLoading, isError } = useGetPost(postId, {
-        enabled: !initialPost
+        initialData: initialPost,
+        staleTime: 0
     });
 
     if(!initialPost && isLoading) {
         return (
             <div className="flex flex-col gap-4 w-screen px-5 h-full">
-                <Head/>
-                <PostSkeleton/>
+                <PostCardSkeleton/>
             </div>
         )
     }
@@ -31,7 +31,7 @@ export default function PostDetailsPage() {
         )
     }
 
-    const post = initialPost || data.post;
+    const post = data?.post || data;
 
     return (
         <div className="flex flex-col gap-4 w-screen px-5 h-full">

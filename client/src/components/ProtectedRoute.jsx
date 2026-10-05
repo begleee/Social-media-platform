@@ -24,8 +24,8 @@ export default function ProtectedRoute() {
         <SidebarProvider defaultOpen={false}>
             <div className="flex min-h-screen w-screen">
                 <AppSidebar/>
-                <main className="min-w-full flex justify-center">
-                    <div className="mt-4 w-full">
+                <main className="min-w-full flex justify-center mt-10">
+                    <div className="w-full">
                         <Outlet/>
                     </div>
                 </main>

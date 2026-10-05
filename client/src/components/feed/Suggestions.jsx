@@ -3,14 +3,13 @@ import SuggestionsAvatar from "./suggestions/SuggestionsAvatar";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "#components/ui/item";
 import { Button } from "#components/ui/button";
 import SuggestionsDialog from "./suggestions/SuggestionsDialog";
+import SuggestionsItemSkeleton from "./suggestions/SuggestionsItemSkeleton";
 
 export default function Suggestions() {
     const { data, isPending } = useGetSuggestions();
 
     if(isPending) return (
-        <div className="flex gap-2 items-center">
-            <p>Suggestions loading...</p>
-        </div>
+        <SuggestionsItemSkeleton/>
     )
 
     const { suggestedUsers } = data && data;
@@ -20,8 +19,8 @@ export default function Suggestions() {
         <Item variant="outline">
             <ItemMedia>
                 <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
-                    {suggestedUsers && suggestedUsers.slice(0, 3).map((user) => (
-                        <SuggestionsAvatar 
+                    {!isPending && suggestedUsers && suggestedUsers.slice(0, 3).map((user) => (
+                        <SuggestionsAvatar
                             className="hidden sm:flex" 
                             key={user.id} 
                             avatarUrl={user.avatarUrl} 
