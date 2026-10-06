@@ -3,12 +3,15 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+const isNeon = process.env.APP_ENV === 'neon';
+const databaseUrl = isNeon ? process.env.DB_URL : process.env.LOCAL_DATABASE_URL;
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DB_URL"],
+    url: databaseUrl,
   },
 });
