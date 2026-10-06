@@ -10,3 +10,4 @@ logs/
 .windsurf/
 generated/
 skills-lock.json
+target.sql
