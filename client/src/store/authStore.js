@@ -7,6 +7,12 @@ export const useAuthStore = create(
         user: null,
         loading: true,
 
+        updateName: (newName) => (
+            set(state => ({
+                user: { ...state.user, name: newName }
+            }))
+        ),
+
         checkAuth: async () => {
             try {
                 const response = await api.get("/me");

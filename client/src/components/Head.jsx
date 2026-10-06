@@ -1,12 +1,14 @@
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Separator } from "#components/ui/separator";
+import { Button } from "#components/ui/button";
 import { useAuthStore } from "../store/authStore";
+import EditProfileDialog from "./EditProfileDialog";
 
 export default function Head() {
     const user = useAuthStore(state => state.user);
     return (
         <>
-            <div className="flex flex-col gap-2 w-fit">
+            <div className="flex flex-col gap-4 w-fit">
                 <div className="flex items-center gap-4 w-fit">
                     <Avatar className="w-10 h-10">
                         <AvatarImage src={user.avatarUrl}/>
@@ -20,6 +22,9 @@ export default function Head() {
                         </div>
                     </div>
                 </div>
+                <EditProfileDialog>
+                    <Button variant="outline">Edit Profile</Button>
+                </EditProfileDialog>
             </div>
             <Separator className="backdrop-blur-2xl"/>
         </>

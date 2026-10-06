@@ -46,7 +46,7 @@ export default function UserPosts() {
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                     <ImageOff className="h-6 w-6 text-muted-foreground" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold tracking-tight">No posts found</h3>
+                <h3 className="mt-4 text-lg font-semibold tracking-tight">Nothing has been posted</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                     When you share your first post, it will show up here.
                 </p>
