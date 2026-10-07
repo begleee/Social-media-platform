@@ -17,14 +17,15 @@ const uploadUserAvatar = async (req, res) => {
             const uploadResult = await streamUploadAvatar(file.buffer);
             const avatarUrl = uploadResult.secure_url;
     
-            await prisma.user.update({
+            const user = await prisma.user.update({
                 where: { id: userId },
                 data: { avatarUrl }
             });
 
             return res.status(200).json({
                 success: true,
-                message: "Uploaded successfully."
+                message: "Uploaded successfully.",
+                newUrl: avatarUrl
             });
         } else {
             return res.status(400).json({
