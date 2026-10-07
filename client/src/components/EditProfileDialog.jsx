@@ -10,14 +10,13 @@ import {
 } from "#components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "#components/ui/field";
 import { Input } from "#components/ui/input";
-import { Avatar, AvatarImage } from "#components/ui/avatar";
 import { Button } from "#components/ui/button";
 import { toast } from "#components/ui/toast";
-import { CameraIcon } from "lucide-react";
 import { useUpdateProfile } from "../hooks/useUsers";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
+import UploadAvatarInput from "./UploadAvatarInput";
 
 export default function EditProfileDialog({ children }) {
     const user = useAuthStore(state => state.user);
@@ -25,7 +24,11 @@ export default function EditProfileDialog({ children }) {
     const { mutate: changeNameMutate, isPending } = useUpdateProfile(user.id);
     const { register, handleSubmit, reset } = useForm();
     const [ isOpen, setIsOpen ] = useState(false);
-    const prevName = user.name;
+    const [ inputValue, setInputValue ] = useState(user.name);
+
+    const handleNameChange = (e) => {
+        setInputValue(e.target.value);
+    }
 
     const onSubmit = handleSubmit(async (data) => {
         changeNameMutate({ name: data.name }, {
@@ -52,31 +55,16 @@ export default function EditProfileDialog({ children }) {
                     </DialogHeader>
                     <FieldGroup>
                         <div className="flex gap-4">
-                            <Field className="w-fit">
-                                <FieldLabel className="relative rounded-full" onClick={() => {}} htmlFor="image">
-                                    <Avatar className="w-20 h-20">
-                                        <AvatarImage className="w-20 h-20" src={user.avatarUrl}/>
-                                    </Avatar>
-                                    <div className="absolute inset-0 bg-black/60 rounded-full">
-                                        <CameraIcon size={40} nonScalingStroke={true} className="absolute top-5 left-5"/>
-                                    </div>
-                                </FieldLabel>
-                                <input
-                                    type="file"
-                                    className="hidden"
-                                    id="image"
-                                    onChange={() => {}}
-                                />
-                            </Field>
+                            <UploadAvatarInput/>
                             <Field>
                                 <FieldLabel htmlFor="name">Name</FieldLabel>
-                                <Input {...register("name")} id="name" defaultValue={prevName}/>
+                                <Input {...register("name")} onChange={handleNameChange} defaultValue={user.name} id="name"/>
                             </Field>
                         </div>
                         <DialogFooter>
                             <DialogClose render={<Button className="w-fit" variant="outline">Close</Button>}/>
                             <Field className="w-fit">
-                                <Button disabled={isPending} type="submit" form="dialog-form">Save changes</Button>
+                                <Button disabled={isPending || inputValue === user.name} type="submit" form="dialog-form">Save changes</Button>
                             </Field>
                         </DialogFooter>
                     </FieldGroup>

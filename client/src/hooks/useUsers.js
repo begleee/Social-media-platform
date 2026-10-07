@@ -19,4 +19,19 @@ function useUpdateProfile(userId) {
     });
 };
 
-export { useGetUser, useUpdateProfile };
+function useUploadAvatar(userId) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (formData) => 
+            api.post("/upload-avatar", formData, { 
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }).then(res => res.data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user', userId] });
+        }
+    });
+};
+
+export { useGetUser, useUpdateProfile, useUploadAvatar };

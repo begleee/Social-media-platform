@@ -13,6 +13,12 @@ export const useAuthStore = create(
             }))
         ),
 
+        updateAvatarUrl: (newUrl) => {
+            set(state => ({
+                user: { ...state.user, avatarUrl: newUrl }
+            }));
+        },
+
         checkAuth: async () => {
             try {
                 const response = await api.get("/me");
