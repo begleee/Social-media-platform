@@ -1,29 +1,39 @@
 import { v2 as cloudinary } from "cloudinary";
-import { generateFileBase64Url } from "../utils/filesUtils.js";
+import { deleteFromCloud, generateFileBase64Url, streamUploadAvatar } from "../utils/filesUtils.js";
 import { prisma } from "../../generated/lib/prisma.js";
+import { extractPublicId } from "cloudinary-build-url";
 
 const uploadUserAvatar = async (req, res) => {
     const userId = req.user.id;
+    const file = req.file;
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId }
         });
 
-        const fileUrl = generateFileBase64Url(req.file.buffer, req.file.mimetype);
-    
-        const result = await cloudinary.uploader.upload(fileUrl, {
-            folder: "user_avatars",
-            resource_type: "auto"
-        });
+        const result = user.avatarUrl ? await deleteFromCloud(extractPublicId(user.avatarUrl)) : { result: "ok" };
 
-        await prisma.user.update({
-            where: { id: userId }, 
-            data: { avatarUrl: result.secure_url }
-        });
+        if(result.result === "ok") {
+            const uploadResult = await streamUploadAvatar(file.buffer);
+            const avatarUrl = uploadResult.secure_url;
     
-        return res.status(200).json({
-            message: "Upload successfully"
-        });
+            await prisma.user.update({
+                where: { id: userId },
+                data: { avatarUrl }
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Uploaded successfully."
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Cloudinary could not find this asset. Check if it was already deleted.',
+                cloudinary_response: result
+            });
+        };
+
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -34,19 +44,32 @@ const deleteUserAvatar = async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId }
-        });
+        }); 
 
-        const isAdmin = req.user.role === "ADMIN";
-        const isAuthor = userId === user.id;
+        if(!user.avatarUrl) {
+            return res.status(404).json({ message: "User doesn't have avatar" });
+        };
 
-        if(!isAdmin && !isAuthor) return res.status(403).json({ message: "Acess denied" });
+        const result = deleteFromCloud(extractPublicId(user.avatarUrl));
 
-        await prisma.user.update({
-            where: { id: userId },
-            data: { avatarUrl: "" }
-        });
+        if(result.result === "ok") {
+            await prisma.user.update({
+                where: { id: userId },
+                data: { avatarUrl: null }
+            });
 
-        return res.status(200).json({ message: "Avatar delted successfully" });
+            return res.status(200).json({
+                success: true,
+                message: "Avatar deleted successfully"
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Cloudinary could not find this asset. Check if it was already deleted.',
+                cloudinary_response: result
+            });
+        };
+
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
