@@ -12,7 +12,7 @@ export default function UploadAvatarInput() {
     const user = useAuthStore(state => state.user);
     const updateAvatarUrl = useAuthStore(state => state.updateAvatarUrl);
     const { mutate: uploadAvatarMutate, isPending } = useUploadAvatar(user.id);
-    const { mutate: deleteAvatarMutate } = useDeleteAvatar(user.id);
+    const { mutate: deleteAvatarMutate, isPending: isDeletingPending } = useDeleteAvatar(user.id);
 
     const fileInputRef = useRef(null);
 
@@ -38,6 +38,7 @@ export default function UploadAvatarInput() {
         deleteAvatarMutate(undefined, {
             onSuccess: () => {
                 toast.add({ description: "Avatar successfully delted" });
+                updateAvatarUrl(null);
             },
             onError: (error) => {
                 toast.add({ description: `Failed to delte avatar. ${error.message}` });
@@ -68,7 +69,7 @@ export default function UploadAvatarInput() {
                             <DropdownMenuGroup>
                                 <DropdownMenuLabel>Choose action</DropdownMenuLabel>
                                 <DropdownMenuItem onClick={triggerFileInput}>Change avatar</DropdownMenuItem>
-                                <DropdownMenuItem variant="destructive" onClick={handleDeleteAvatar}>Delete avatar</DropdownMenuItem>
+                                <DropdownMenuItem variant="destructive" onClick={handleDeleteAvatar} disabled={isDeletingPending}>Delete avatar</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
