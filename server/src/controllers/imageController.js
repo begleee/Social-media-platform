@@ -51,7 +51,7 @@ const deleteUserAvatar = async (req, res) => {
             return res.status(404).json({ message: "User doesn't have avatar" });
         };
 
-        const result = deleteFromCloud(extractPublicId(user.avatarUrl));
+        const result = await deleteFromCloud(extractPublicId(user.avatarUrl));
 
         if(result.result === "ok") {
             await prisma.user.update({
