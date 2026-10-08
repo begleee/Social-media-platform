@@ -34,4 +34,15 @@ function useUploadAvatar(userId) {
     });
 };
 
-export { useGetUser, useUpdateProfile, useUploadAvatar };
+function useDeleteAvatar(userId) {
+    const queryClinet = useQueryClient();
+    return useMutation({
+        mutationFn: () => 
+            api.delete("/delete-avatar", { data: null }).then(res => res.data),
+        onSuccess: () => {
+            queryClinet.invalidateQueries({ queryKey: ['user', userId] });
+        }
+    });
+};
+
+export { useGetUser, useUpdateProfile, useUploadAvatar, useDeleteAvatar };
