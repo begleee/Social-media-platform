@@ -1,5 +1,5 @@
 import { prisma } from "../../generated/lib/prisma.js";
-import { generateFileBase64Url, streamUpload } from "../utils/filesUtils.js";
+import { deleteMultipleFromCloud, generateFileBase64Url, streamUpload } from "../utils/filesUtils.js";
 import { v2 as cloudinary } from "cloudinary";
 
 const createPost = async (req, res) => {
@@ -180,22 +180,21 @@ const getUserPosts = async (req, res) => {
 const deletePost = async (req, res) => {
     const postId = req.params.id;
     const userId = req.user.id;
-    const userRole = req.user.role;
     try {
         const post = await prisma.post.findUnique({
-            where: { id: postId }
+            where: { id: postId },
+            include: {
+                imageUrls: {
+                    select: { id: true }
+                }
+            }
         });
 
         if(!post) {
             return res.status(404).json({ message: "Post not found" });
-        }
+        };
 
-        const isAdmin = userRole === "ADMIN";
-        const isAuthor = post.userId === userId;
-
-        if(!isAdmin && !isAuthor) {
-            return res.status(403).json({ message: "Access denied. You are not authorized to delete this post." });
-        }
+        const result = (post.imageUrls && post.imageUrls.length > 0) && await deleteMultipleFromCloud(post.imageUrls.map(imgUrl => imgUrl.id));
 
         await prisma.post.delete({
             where: { id: postId }

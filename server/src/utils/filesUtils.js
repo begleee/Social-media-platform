@@ -34,6 +34,21 @@ const deleteFromCloud = (publicId) => {
     return result;
 };
 
+const deleteMultipleFromCloud = (publicIds) => {
+    const result = new Promise((resolve, reject) => {
+        cloudinary.api.delete_resources(
+            publicIds,
+            { invalidate: true },
+            (error, result) => {
+                if(result) resolve(result);
+                else reject(error);
+            }
+        );
+    });
+
+    return result;
+};
+
 const streamUpload = (fileBuffer) => {
     return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
@@ -47,4 +62,4 @@ const streamUpload = (fileBuffer) => {
     });
 };
 
-export { generateFileBase64Url, streamUpload, streamUploadAvatar, deleteFromCloud };
+export { generateFileBase64Url, streamUpload, streamUploadAvatar, deleteFromCloud, deleteMultipleFromCloud };
