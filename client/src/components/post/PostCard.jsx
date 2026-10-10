@@ -9,7 +9,13 @@ import { Skeleton } from "#components/ui/skeleton";
 export default function PostCard({ post, isFollowed }) {
     return (
         <div className="flex flex-col mx-auto max-w-2xl gap-2">
-            <PostCardHeader userId={post.authorId.id} isFollowed={isFollowed} name={post.authorId.name} avatarUrl={post.authorId.avatarUrl}/>
+            <PostCardHeader 
+                userId={post.authorId.id} 
+                isFollowed={isFollowed} 
+                name={post.authorId.name} 
+                avatarUrl={post.authorId.avatarUrl}
+                postId={post.id}
+            />
             <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>        
                 <div className="relative aspect-video w-full">
                     <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />

@@ -32,4 +32,14 @@ function useGetPost(postId, options = {}) {
     });
 };
 
-export { useCreatePost, useGetMyPosts, useGetPost };
+function useDeletePost() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (postId) => api.delete(`/delete-post/${postId}`).then(res => res.data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['myPosts'] });
+        }
+    });
+};
+
+export { useCreatePost, useGetMyPosts, useGetPost, useDeletePost };
