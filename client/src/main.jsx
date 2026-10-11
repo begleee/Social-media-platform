@@ -10,6 +10,7 @@ import Register from './pages/auth/Register.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import CreatePostPage from './pages/CreatePostPage.jsx'
 import PostDetailsPage from './pages/PostDetailsPage.jsx'
+import EditPost from './pages/EditPost.jsx'
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,8 @@ const router = createBrowserRouter([
           { path: "feed", Component: Feed },
           { path: "create-post", Component: CreatePostPage },
           { path: "profile", Component: Profile },
-          { path: "profile/:postId", Component: PostDetailsPage }
+          { path: ":postId", Component: PostDetailsPage },
+          { path: "edit/:postId", Component: EditPost },
         ]
       }
     ]

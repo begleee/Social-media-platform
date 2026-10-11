@@ -30,8 +30,9 @@ export default function PostCardMoreActionMenu({ postId, userId }) {
                 <Ellipsis/>
             </Button>}/>
             <DropdownMenuContent>
-                <DropdownMenuItem variant="destructive" onClick={handleDelete}>Delete</DropdownMenuItem>
+                <DropdownMenuItem className="flex justify-between" onClick={() => navigate("/edit/" + postId)}>Edit</DropdownMenuItem>
+                <DropdownMenuItem className="flex justify-between" variant="destructive" onClick={handleDelete}>Delete</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
-}
+    );
+};
