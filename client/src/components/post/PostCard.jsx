@@ -14,7 +14,7 @@ export default function PostCard({ post, isFollowed }) {
                 isFollowed={isFollowed} 
                 name={post.authorId.name} 
                 avatarUrl={post.authorId.avatarUrl}
-                postId={post.id}
+                post={post}
             />
             <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>        
                 <div className="relative aspect-video w-full">

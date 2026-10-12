@@ -1,7 +1,7 @@
 import UserPosts from '../components/profile/UserPosts';
 import Head from '../components/Head';
 
-export default function Profile() {
+export default function ProfilePage() {
   return (
     <div className="flex flex-col gap-4 px-5 h-full">
       <Head/>

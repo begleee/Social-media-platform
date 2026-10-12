@@ -42,4 +42,15 @@ function useDeletePost() {
     });
 };
 
-export { useCreatePost, useGetMyPosts, useGetPost, useDeletePost };
+function useEditPost() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({postId, title, details}) => 
+            api.patch(`/update-post/${postId}`, { title, details }).then(res => res.data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['myPosts'] });
+        }
+    });
+};
+
+export { useCreatePost, useGetMyPosts, useGetPost, useDeletePost, useEditPost };

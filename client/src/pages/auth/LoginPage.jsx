@@ -1,6 +1,6 @@
 import { LoginForm } from "../../components/auth/LoginForm";
 
-export default function Login() {
+export default function LoginPage() {
   return (
     <div className="flex w-full items-center justify-center">
         <div className="w-full max-w-sm">

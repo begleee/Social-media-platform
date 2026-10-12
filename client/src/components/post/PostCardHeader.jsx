@@ -2,7 +2,7 @@ import { Avatar, AvatarImage } from "#components/ui/avatar";
 import FollowButton from "../FollowButton";
 import PostCardMoreActionMenu from "./PostCardMoreActionMenu";
 
-export default function PostCardHeader({ name, avatarUrl, userId, isFollowed, postId }) {
+export default function PostCardHeader({ name, avatarUrl, userId, isFollowed, post }) {
     return (
         <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">
@@ -12,7 +12,7 @@ export default function PostCardHeader({ name, avatarUrl, userId, isFollowed, po
                 <p>{name}</p>
             </div>
             <FollowButton userId={userId} isFollowed={isFollowed}/>
-            <PostCardMoreActionMenu userId={userId} postId={postId}/>
+            <PostCardMoreActionMenu userId={userId} post={post}/>
         </div>
     )
 };
