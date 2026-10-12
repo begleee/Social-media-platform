@@ -120,8 +120,6 @@ const getMyPosts = async (req, res) => {
 
 const updatePost = async (req, res) => {
     const postId = req.params.id;
-    const userId = req.user.id;
-    const userRole = req.user.role;
     const { title, details } = req.body;
     try {
         const post = await prisma.post.findUnique({
@@ -130,13 +128,6 @@ const updatePost = async (req, res) => {
 
         if(!post) {
             return res.status(404).json({ message: "Post not found" });
-        }
-
-        const isAdmin = userRole === "ADMIN";
-        const isAuthor = post.userId === userId;
-
-        if(!isAdmin && !isAuthor) {
-            return res.status(403).json({ message: "Access denied. You are not authorized to delete this post." });
         }
 
         await prisma.post.update({

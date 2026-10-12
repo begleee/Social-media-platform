@@ -7,7 +7,7 @@ import { uploadImages } from "../middlewares/uploadMiddleware.js";
 const router = Router();
 
 router.post("/create-post", authMiddleware, uploadImages, createPost);
-router.post("/update-post/:id", authMiddleware, uploadImages, updatePost);
+router.patch("/update-post/:id", authMiddleware, updatePost);
 router.get("/get-post/:id", authMiddleware, getPost);
 router.get("/get-my-posts", authMiddleware, getMyPosts);
 router.delete("/delete-post/:id", authMiddleware, deletePost);
