@@ -18,67 +18,103 @@ import {
 
 import { Input } from "#components/ui/input";
 import { useForm } from "react-hook-form";
-import { useAuthStore } from "../../store/authStore"
-import PasswordInput from "../PasswordInput"
-import { useNavigate } from "react-router"
+import { useAuthStore } from "../../store/authStore";
+import PasswordInput from "../PasswordInput";
+import { useNavigate, Link } from "react-router";
+import { toast } from "#components/ui/toast";
 
 export function LoginForm({ className, ...props }) {
   const login = useAuthStore((state) => state.login);
   const loading = useAuthStore((state) => state.loading);
-  const { register, handleSubmit} = useForm();
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
     const { email, password } = data;
-    const result = await login(email, password);
-    if(result.success) navigate("/feed");
+    try {
+      const result = await login(email, password);
+      if (result?.success) {
+        navigate("/feed");
+      } else {
+        toast.add({
+          description: result?.error || "Invalid email or password.",
+        });
+      }
+    } catch (err) {
+      toast.add({
+        description: err.message || "An unexpected error occurred.",
+      });
+    }
   });
-  
-  return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
 
-          <CardDescription>
+  return (
+    <div
+      className={cn("w-full max-w-sm sm:max-w-md mx-auto px-4 py-6", className)}
+      {...props}
+    >
+      <Card className="rounded-xl border shadow-sm">
+        <CardHeader className="space-y-1 text-center sm:text-left">
+          <CardTitle className="text-xl sm:text-2xl font-semibold">
+            Login to your account
+          </CardTitle>
+          <CardDescription className="text-xs sm:text-sm text-muted-foreground">
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={onSubmit}>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-
+            <FieldGroup className="space-y-4">
+              <Field className="space-y-1.5">
+                <FieldLabel htmlFor="email" className="text-xs sm:text-sm font-medium">
+                  Email
+                </FieldLabel>
                 <Input
                   id="email"
                   type="email"
                   placeholder="m@example.com"
                   required
+                  className="w-full text-sm"
                   {...register("email")}
                 />
               </Field>
 
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+              <Field className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <FieldLabel
+                    htmlFor="password"
+                    className="text-xs sm:text-sm font-medium"
+                  >
+                    Password
+                  </FieldLabel>
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs text-muted-foreground underline-offset-4 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
 
-                <PasswordInput {...register("password")}/>
+                <PasswordInput
+                  id="password"
+                  className="w-full text-sm"
+                  {...register("password", { required: true })}
+                />
               </Field>
 
-              <Field>
-                <Button disabled={loading} type="submit">Login</Button>
-                
-                <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="/register">Sign up</a>
+              <Field className="space-y-3 pt-2">
+                <Button disabled={loading} type="submit" className="w-full">
+                  {loading ? "Logging in..." : "Login"}
+                </Button>
+
+                <FieldDescription className="text-center text-xs sm:text-sm text-muted-foreground">
+                  Don&apos;t have an account?{" "}
+                  <Link
+                    to="/register"
+                    className="font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    Sign up
+                  </Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -86,5 +122,5 @@ export function LoginForm({ className, ...props }) {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};

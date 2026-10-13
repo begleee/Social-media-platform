@@ -4,64 +4,85 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ImageOff } from "lucide-react";
 import PostCardActions from "./PostCardActions";
 import PostCardHeader from "./PostCardHeader";
-import { Skeleton } from "#components/ui/skeleton";
 
 export default function PostCard({ post, isFollowed }) {
-    return (
-        <div className="flex flex-col mx-auto max-w-2xl gap-2">
-            <PostCardHeader 
-                userId={post.authorId.id} 
-                isFollowed={isFollowed} 
-                name={post.authorId.name} 
-                avatarUrl={post.authorId.avatarUrl}
-                post={post}
-            />
-            <Card className="relative mx-auto max-w-2xl pt-0 overflow-hidden" key={post.id}>        
-                <div className="relative aspect-video w-full">
-                    <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
+  return (
+    <div className="flex flex-col w-full max-w-md mx-auto gap-2">
+      <PostCardHeader 
+        userId={post.authorId.id} 
+        isFollowed={isFollowed} 
+        name={post.authorId.name} 
+        avatarUrl={post.authorId.avatarUrl}
+        post={post}
+      />
+      
+      <Card className="relative w-full mx-auto pt-0 overflow-hidden rounded-xl border shadow-sm" key={post.id}>        
+        <div className="relative aspect-video w-full overflow-hidden bg-muted">
+          <div className="absolute inset-0 z-20 bg-black/25 pointer-events-none" />
 
-                    {post.imageUrls && post.imageUrls.length > 0 ? (
-                        <Carousel className="w-full h-full">
-                            <CarouselContent className="ml-0 h-full">
-                                {post.imageUrls.map((image) => (
-                                    <CarouselItem key={image.id} className="pl-0 h-full">
-                                        {image.url && <img 
-                                            src={image.url}
-                                            alt="" 
-                                            className="w-full h-full object-cover"
-                                        />}
-                                    </CarouselItem>
-                                ))}
-                            </CarouselContent>
-                            
-                            {post.imageUrls.length > 1 && (
-                                <>
-                                    <CarouselPrevious className="absolute left-4 top-1/2 z-30" />
-                                    <CarouselNext className="absolute right-4 top-1/2 z-30" />
-                                </>
-                            )}
-                        </Carousel>
-                    ) :  <>
-                        <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none">
-                            <div className="flex h-full w-full flex-col items-center justify-center " to={post.id}>
-                                <ImageOff className="mb-1 h-4 w-4 opacity-50" />
-                                <span>No Image</span>
-                            </div>
-                        </div>
-                        <Skeleton className="w-xl h-xl"/>
-                    </>}
-                </div>
-
-                <CardHeader className="relative z-10">
-                    <CardAction>
-                    <Badge variant="ghost">{post.updatedAt.split('T')[0]}</Badge>
-                    </CardAction>
-                    <CardTitle>{post.title}</CardTitle>
-                    {post.details && <CardDescription>{post.details}</CardDescription>}
-                    <PostCardActions isLiked={post.likes.length > 0} postId={post.id} likesCount={post["_count"].likes} commentsCount={post["_count"].comments}/>
-                </CardHeader>
-
-            </Card>
+          {post.imageUrls && post.imageUrls.length > 0 ? (
+            <Carousel className="w-full h-full">
+              <CarouselContent className="ml-0 h-full">
+                {post.imageUrls.map((image) => (
+                  <CarouselItem key={image.id} className="pl-0 h-full">
+                    {image.url && (
+                      <img 
+                        src={image.url}
+                        alt={post.title || "Post image"} 
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              
+              {post.imageUrls.length > 1 && (
+                <>
+                  <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 h-8 w-8 bg-background/80 backdrop-blur-sm" />
+                  <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 h-8 w-8 bg-background/80 backdrop-blur-sm" />
+                </>
+              )}
+            </Carousel>
+          ) : (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-muted/60 text-muted-foreground p-4 text-center">
+              <ImageOff className="mb-2 h-5 w-5 opacity-60" />
+              <span className="text-xs font-medium">No Image Available</span>
+            </div>
+          )}
         </div>
-    )
+
+        <CardHeader className="relative z-10 space-y-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col gap-1 pr-1">
+                <CardTitle className="text-base sm:text-lg font-semibold leading-snug line-clamp-2">
+                {post.title}
+                </CardTitle>
+              
+                {post.details && (
+                <CardDescription className="text-xs sm:text-sm text-muted-foreground line-clamp-3">
+                    {post.details}
+                </CardDescription>
+                )}
+
+                <div className="pt-1">
+                    <PostCardActions
+                        isLiked={post.likes?.length > 0}
+                        postId={post.id}
+                        likesCount={post["_count"]?.likes ?? 0}
+                        commentsCount={post["_count"]?.comments ?? 0}
+                    />
+                </div>
+            </div>
+
+            <CardAction className="shrink-0 pt-0.5">
+              <Badge variant="ghost" className="text-[11px] font-normal px-2 py-0.5 whitespace-nowrap">
+                {post.updatedAt?.split('T')[0]}
+              </Badge>
+            </CardAction>
+          </div>
+
+        </CardHeader>
+      </Card>
+    </div>
+  );
 };

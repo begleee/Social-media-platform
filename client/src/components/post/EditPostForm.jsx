@@ -1,107 +1,140 @@
 import { Button } from "#components/ui/button";
-import { Card, CardContent } from "#components/ui/card";
-import { FieldGroup } from "#components/ui/field";
+import { Card, CardContent, CardHeader, CardTitle } from "#components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "#components/ui/field";
 import { Input } from "#components/ui/input";
-import { Field, FieldLabel } from "#components/ui/field";
 import { Textarea } from "#components/ui/textarea";
 import { toast } from "#components/ui/toast";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEditPost } from "../../hooks/usePosts";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "#components/ui/carousel";
 import { ImageOff } from "lucide-react";
-import { Skeleton } from "#components/ui/skeleton";
 import { useNavigate } from "react-router";
 
 export default function EditPostForm({ post }) {
-    const navigate = useNavigate();
-    const { mutate, isPending } = useEditPost();
-    const [ titleInputValue, setTitleInputValue ] = useState(post.title);
-    const [ detailsInputValue, setDetailsInputValue ] = useState(post.details);
+  const navigate = useNavigate();
+  const { mutate, isPending } = useEditPost();
 
-    const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      details: post?.details || "",
+    },
+  });
 
-    function handleTitleChange(e) {
-        setTitleInputValue(e.target.value);
+  const watchedTitle = watch("title");
+  const watchedDetails = watch("details");
+
+  const isSubmitAvailable =
+    watchedTitle !== (post?.title || "") ||
+    watchedDetails !== (post?.details || "");
+
+  const onSubmit = handleSubmit(async (data) => {
+    const payload = {
+      postId: post.id,
+      title: data.title,
+      details: data.details,
     };
 
-    function handleDetailsChange(e) {
-        setDetailsInputValue(e.target.value);
-    };
-
-    const onSubmit = handleSubmit(async (data) => {
-        const obj = {
-            postId: post.id,
-            title: data.title,
-            details: data.details
-        }
-
-        mutate(obj, {
-            onSuccess: () => {
-                reset();
-                toast.add({ description: "Post has been edited successfully." });
-                navigate(-1);
-            },
-            onError: (err) => {
-                toast.add({ description: err.message });
-            }
-        });
+    mutate(payload, {
+      onSuccess: () => {
+        reset();
+        toast.add({ description: "Post updated successfully." });
+        navigate(-1);
+      },
+      onError: (err) => {
+        toast.add({ description: err.message || "Failed to update post." });
+      },
     });
+  });
 
-    const isSumbitAvailable = post.title !== titleInputValue || post.details !== detailsInputValue;
-    return (
-        <Card className="w-[50%] self-center">
-            <CardContent>
-                <form onSubmit={onSubmit}>
-                    <FieldGroup>
-                        <Field>
-                            <div className="relative aspect-video w-full">
-                                <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none" />
+  return (
+    <Card className="w-full max-w-md mx-auto rounded-xl border shadow-sm overflow-hidden">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold">Edit Post</CardTitle>
+      </CardHeader>
 
-                                {post.imageUrls && post.imageUrls.length > 0 ? (
-                                    <Carousel className="w-full h-full">
-                                        <CarouselContent className="ml-0 h-full">
-                                            {post.imageUrls.map((image) => (
-                                                <CarouselItem key={image.id} className="pl-0 h-full">
-                                                    {image.url && <img 
-                                                        src={image.url}
-                                                        alt="" 
-                                                        className="w-full h-full object-cover"
-                                                    />}
-                                                </CarouselItem>
-                                            ))}
-                                        </CarouselContent>
-                                        
-                                        {post.imageUrls.length > 1 && (
-                                            <>
-                                                <CarouselPrevious className="absolute left-4 top-1/2 z-30" />
-                                                <CarouselNext className="absolute right-4 top-1/2 z-30" />
-                                            </>
-                                        )}
-                                    </Carousel>
-                                ) :  <>
-                                    <div className="absolute inset-0 z-20 bg-black/35 pointer-events-none">
-                                        <div className="flex h-full w-full flex-col items-center justify-center " to={post.id}>
-                                            <ImageOff className="mb-1 h-4 w-4 opacity-50" />
-                                            <span>No Image</span>
-                                        </div>
-                                    </div>
-                                    <Skeleton className="w-xl h-xl"/>
-                                </>}
-                            </div>
-                            <FieldLabel htmlFor="title">Post Title</FieldLabel>
-                            <Input {...register("title")} onChange={handleTitleChange} id="title" defaultValue={titleInputValue} placeholder="Write your post post title"/>
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="details">
-                                Post details
-                            </FieldLabel>
-                            <Textarea {...register("details")} onChange={handleDetailsChange} id="details" defaultValue={detailsInputValue} placeholder="Write your post details here"/>
-                            <Button disabled={isPending || !isSumbitAvailable} type="submit">Edit</Button>
-                        </Field>
-                    </FieldGroup>
-                </form>
-            </CardContent>
-        </Card>
-    )
-};
+      <CardContent>
+        <form onSubmit={onSubmit}>
+          <FieldGroup>
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted border">
+              <div className="absolute inset-0 z-20 bg-black/25 pointer-events-none" />
+
+              {post?.imageUrls && post.imageUrls.length > 0 ? (
+                <Carousel className="w-full h-full">
+                  <CarouselContent className="ml-0 h-full">
+                    {post.imageUrls.map((image) => (
+                      <CarouselItem key={image.id} className="pl-0 h-full">
+                        {image.url && (
+                          <img
+                            src={image.url}
+                            alt={post.title || "Post image"}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+
+                  {post.imageUrls.length > 1 && (
+                    <>
+                      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 h-8 w-8 bg-background/80 backdrop-blur-sm" />
+                      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 h-8 w-8 bg-background/80 backdrop-blur-sm" />
+                    </>
+                  )}
+                </Carousel>
+              ) : (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-muted/60 text-muted-foreground p-4 text-center">
+                  <ImageOff className="mb-2 h-5 w-5 opacity-60" />
+                  <span className="text-xs font-medium">No Image Attached</span>
+                </div>
+              )}
+            </div>
+
+            <Field>
+              <FieldLabel htmlFor="title" className="text-xs sm:text-sm font-medium">
+                Post Title
+              </FieldLabel>
+              <Input
+                {...register("title", { required: true })}
+                id="title"
+                placeholder="Enter a post title"
+                className="w-full text-sm"
+              />
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="details" className="text-xs sm:text-sm font-medium">
+                Post details
+              </FieldLabel>
+              <Textarea
+                {...register("details")}
+                id="details"
+                placeholder="Write your post details here..."
+                rows={3}
+                className="w-full text-sm resize-none"
+              />
+            </Field>
+
+            <div className="flex flex-col items-center gap-2">
+              <Button
+                type="submit"
+                disabled={isPending || !isSubmitAvailable}
+                className="w-full"
+              >
+                {isPending ? "Saving..." : "Save Changes"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(-1)}
+                className="w-full"
+              >
+                Cancel
+              </Button>
+            </div>
+          </FieldGroup>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
