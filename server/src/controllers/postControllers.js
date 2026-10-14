@@ -119,6 +119,7 @@ const getMyPosts = async (req, res) => {
 }
 
 const updatePost = async (req, res) => {
+    const userId = req.user.id;
     const postId = req.params.id;
     const { title, details } = req.body;
     try {
@@ -126,9 +127,11 @@ const updatePost = async (req, res) => {
             where: { id: postId }
         });
 
-        if(!post) {
-            return res.status(404).json({ message: "Post not found" });
-        }
+        if(!post) res.status(404).json({ message: "Post not found" });
+
+        if(userId !== post.userId) res.status(401).json({ 
+            message: "Access denied. You are not the onwer of post."
+        });
 
         await prisma.post.update({
             where: { id: postId },
