@@ -10,11 +10,20 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ImageOff } from "lucide-react";
 import { useNavigate } from "react-router";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  title: z.string().min(7),
+  deteails: z.string()
+});
+
 export default function EditPostForm({ post }) {
   const navigate = useNavigate();
   const { mutate, isPending } = useEditPost();
 
-  const { register, handleSubmit, reset, watch } = useForm({
+  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
     defaultValues: {
       title: post?.title || "",
       details: post?.details || "",
@@ -95,11 +104,12 @@ export default function EditPostForm({ post }) {
                 Post Title
               </FieldLabel>
               <Input
-                {...register("title", { required: true })}
+                {...register("title")}
                 id="title"
                 placeholder="Enter a post title"
                 className="w-full text-sm"
               />
+            {errors.title && <div className='text-red-500'>{errors.title.message}</div>}
             </Field>
 
             <Field>
@@ -114,6 +124,7 @@ export default function EditPostForm({ post }) {
                 className="w-full text-sm resize-none"
               />
             </Field>
+            {errors.details && <div className='text-red-500'>{errors.details.message}</div>}
 
             <div className="flex flex-col items-center gap-2">
               <Button
