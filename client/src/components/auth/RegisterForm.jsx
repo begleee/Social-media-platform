@@ -23,10 +23,21 @@ import PasswordInput from "../PasswordInput";
 import { useNavigate, Link } from "react-router";
 import { toast } from "#components/ui/toast";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  name: z.string().min(3),
+  email: z.string().email(),
+  password: z.string().min(8)
+})
+
 export function RegisterForm({ className, ...props }) {
   const registerRoute = useAuthStore((state) => state.register);
   const loading = useAuthStore((state) => state.loading);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
+  });
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -54,19 +65,19 @@ export function RegisterForm({ className, ...props }) {
       {...props}
     >
       <Card className="rounded-xl border shadow-sm">
-        <CardHeader className="space-y-1 text-center sm:text-left">
+        <CardHeader className="text-center sm:text-left">
           <CardTitle className="text-xl sm:text-2xl font-semibold">
             Create an account
           </CardTitle>
           <CardDescription className="text-xs sm:text-sm text-muted-foreground">
-            Enter your details below to create your account
+            Enter your credentials below to create your account
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           <form onSubmit={onSubmit}>
-            <FieldGroup className="space-y-4">
-              <Field className="space-y-1.5">
+            <FieldGroup className="gap-3">
+              <Field>
                 <FieldLabel htmlFor="name" className="text-xs sm:text-sm font-medium">
                   Name
                 </FieldLabel>
@@ -77,10 +88,11 @@ export function RegisterForm({ className, ...props }) {
                   required
                   className="w-full text-sm"
                   {...register("name", { required: true })}
-                />
+                  />
               </Field>
+              {errors.name && <div className="text-red-500">{errors.name.message}</div>}
 
-              <Field className="space-y-1.5">
+              <Field>
                 <FieldLabel htmlFor="email" className="text-xs sm:text-sm font-medium">
                   Email
                 </FieldLabel>
@@ -93,8 +105,9 @@ export function RegisterForm({ className, ...props }) {
                   {...register("email", { required: true })}
                 />
               </Field>
+              {errors.email && <div className="text-red-500">{errors.email.message}</div>}
 
-              <Field className="space-y-1.5">
+              <Field>
                 <FieldLabel
                   htmlFor="password"
                   className="text-xs sm:text-sm font-medium"
@@ -108,8 +121,10 @@ export function RegisterForm({ className, ...props }) {
                   {...register("password", { required: true })}
                 />
               </Field>
+              {errors.password && <div className="text-red-500">{errors.password.message}</div>}
 
-              <Field className="space-y-3 pt-2">
+
+              <Field>
                 <Button disabled={loading} type="submit" className="w-full">
                   {loading ? "Creating account..." : "Sign up"}
                 </Button>

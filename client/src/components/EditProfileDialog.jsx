@@ -18,11 +18,20 @@ import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import UploadAvatarInput from "./UploadAvatarInput";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+    name: z.string().min(3)
+});
+
 export default function EditProfileDialog({ children }) {
     const user = useAuthStore(state => state.user);
     const updateName = useAuthStore(state => state.updateName);
     const { mutate: changeNameMutate, isPending } = useUpdateProfile(user.id);
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+        resolver: zodResolver(schema)
+    });
     const [ isOpen, setIsOpen ] = useState(false);
     const [ inputValue, setInputValue ] = useState(user.name);
 
@@ -59,6 +68,7 @@ export default function EditProfileDialog({ children }) {
                             <Field>
                                 <FieldLabel htmlFor="name">Name</FieldLabel>
                                 <Input {...register("name")} onChange={handleNameChange} defaultValue={user.name} id="name"/>
+                                {errors.name && <div className="text-red-500">{errors.name.message}</div>}
                             </Field>
                         </div>
                         <DialogFooter>

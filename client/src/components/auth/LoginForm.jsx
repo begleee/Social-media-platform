@@ -23,10 +23,20 @@ import PasswordInput from "../PasswordInput";
 import { useNavigate, Link } from "react-router";
 import { toast } from "#components/ui/toast";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8)
+})
+
 export function LoginForm({ className, ...props }) {
   const login = useAuthStore((state) => state.login);
   const loading = useAuthStore((state) => state.loading);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
+  });
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -64,8 +74,8 @@ export function LoginForm({ className, ...props }) {
 
         <CardContent>
           <form onSubmit={onSubmit}>
-            <FieldGroup className="space-y-4">
-              <Field className="space-y-1.5">
+            <FieldGroup className="gap-3">
+              <Field >
                 <FieldLabel htmlFor="email" className="text-xs sm:text-sm font-medium">
                   Email
                 </FieldLabel>
@@ -78,8 +88,9 @@ export function LoginForm({ className, ...props }) {
                   {...register("email")}
                 />
               </Field>
+              {errors.email && <div className="text-red-500">{errors.email.message}</div>}
 
-              <Field className="space-y-1.5">
+              <Field>
                 <div className="flex items-center justify-between">
                   <FieldLabel
                     htmlFor="password"
@@ -100,9 +111,10 @@ export function LoginForm({ className, ...props }) {
                   className="w-full text-sm"
                   {...register("password", { required: true })}
                 />
+                {errors.password && <div className="text-red-500">{errors.password.message}</div>}
               </Field>
 
-              <Field className="space-y-3 pt-2">
+              <Field>
                 <Button disabled={loading} type="submit" className="w-full">
                   {loading ? "Logging in..." : "Login"}
                 </Button>

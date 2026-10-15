@@ -9,13 +9,26 @@ import { useCreatePost } from '../../hooks/usePosts'
 import { toast } from '#components/ui/toast'
 import { useEffect, useRef, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+
+const schema = z.object({
+  title: z.string().min(7),
+  deteails: z.string()
+});
+
 export default function CreatePostForm() {
   const { mutate, isPending } = useCreatePost();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
 
   const fileInputRef = useRef(null);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      details: ""
+    }
+  });
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files || []);
@@ -72,14 +85,14 @@ export default function CreatePostForm() {
 
   return (
     <Card className="w-full max-w-md mx-auto rounded-xl border shadow-sm">
-      <CardHeader className="p-4 sm:p-6 pb-2">
+      <CardHeader>
         <CardTitle className="text-lg font-semibold">Create Post</CardTitle>
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-6 pt-2">
+      <CardContent>
         <form onSubmit={onSubmit}>
-          <FieldGroup className="space-y-4">
-            <Field className="space-y-1.5">
+          <FieldGroup>
+            <Field>
               <FieldLabel htmlFor="title" className="text-xs sm:text-sm font-medium">
                 Post Title
               </FieldLabel>
@@ -90,8 +103,9 @@ export default function CreatePostForm() {
                 className="w-full text-sm"
               />
             </Field>
+            {errors.title && <div className='text-red-500'>{errors.title.message}</div>}
 
-            <Field className="space-y-1.5">
+            <Field>
               <FieldLabel htmlFor="details" className="text-xs sm:text-sm font-medium">
                 Post details
               </FieldLabel>
@@ -103,8 +117,9 @@ export default function CreatePostForm() {
                 className="w-full text-sm resize-none"
               />
             </Field>
+            {errors.description && <div className='text-red-500'>{errors.description.message}</div>}
 
-            <Field className="space-y-2">
+            <Field>
               <FieldLabel
                 htmlFor="images"
                 className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors hover:bg-muted/50 border-muted-foreground/25"
