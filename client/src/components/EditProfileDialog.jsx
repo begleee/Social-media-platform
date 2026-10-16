@@ -22,7 +22,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 const schema = z.object({
-    name: z.string().min(3)
+    name: z.string()
+        .min(3, { error: "Name length must be at least 3 characters" })
+        .max(15, { error: "Name length must be less than 15 character" }),
 });
 
 export default function EditProfileDialog({ children }) {

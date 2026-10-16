@@ -27,8 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8)
+  email: z.string().email({ error: "Invalid email address" }),
+  password: z.string().min(8, { error: "Password length must be at least 8 characters" })
 })
 
 export function LoginForm({ className, ...props }) {

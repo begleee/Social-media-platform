@@ -13,8 +13,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
 const schema = z.object({
-  title: z.string().min(7),
-  deteails: z.string()
+  title: z.string().min(7, { error: "Title length must be at least 7 characters" }),
+  details: z.string().max(100, { error: "Details lentgth must be less than 100 characters" })
 });
 
 export default function CreatePostForm() {
@@ -117,7 +117,7 @@ export default function CreatePostForm() {
                 className="w-full text-sm resize-none"
               />
             </Field>
-            {errors.description && <div className='text-red-500'>{errors.description.message}</div>}
+            {errors.details && <div className='text-red-500'>{errors.details.message}</div>}
 
             <Field>
               <FieldLabel
