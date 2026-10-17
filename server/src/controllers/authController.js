@@ -43,6 +43,15 @@ const login = async (req, res) => {
 
     const user = await prisma.user.findUnique({
         where: { email },
+        include: {
+            _count: {
+                select: {
+                    posts: true,
+                    followers: true,
+                    followings: true
+                }
+            }
+        }
     });
 
     if(!user) res.status(401).json({ error: "Invalid email or password" });
@@ -65,7 +74,11 @@ const login = async (req, res) => {
         status: "success",
         user: {
             id: user.id,
-            email: email
+            email: email,
+            avatarUrl: user.avatarUrl,
+            postsCount: user._count.posts,
+            followingsCount: user._count.followers,
+            followersCount: user._count.followings
         },
         token,
     });

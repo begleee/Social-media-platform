@@ -155,7 +155,7 @@ const updatePost = async (req, res) => {
 };
 
 const getUserPosts = async (req, res) => {
-    const { userId } = req.params.id;
+    const userId = req.params.id;
     try {
         const posts = await prisma.post.findMany({
             where: { userId }
