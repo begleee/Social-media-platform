@@ -13,7 +13,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
 const schema = z.object({
-  title: z.string().min(7, { error: "Title length must be at least 7 characters" }),
+  title: z.string()
+    .min(7, { error: "Title length must be at least 7 characters" })
+    .max(25, { error: "Title length must be less than 25 characters" }),
   details: z.string().max(100, { error: "Details lentgth must be less than 100 characters" })
 });
 
