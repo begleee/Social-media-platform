@@ -13,7 +13,7 @@ import followRoutes from "./routes/followRoutes.js";
 import feedRoutes from "./routes/feedRoutes.js";
 import imageRoutes from "./routes/imageRoutes.js";
 import suggestionRoutes from "./routes/suggestionRoutes.js";
-import health from "./routes/healt.js";
+import health from "./routes/health.js";
 
 const app = express();
 app.use(express.json());

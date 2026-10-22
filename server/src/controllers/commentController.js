@@ -19,7 +19,7 @@ const commentPost = async (req, res) => {
             }
         });
 
-        return res.status(201).json({ 
+        return res.status(201).json({
             message: "Commented successfully",
             comment
         });
@@ -52,7 +52,7 @@ const updateComment = async (req, res) => {
             }
         });
 
-        res.status(200).json({ 
+        res.status(200).json({
             messaage: "Comment successfully updated",
             comment
         })

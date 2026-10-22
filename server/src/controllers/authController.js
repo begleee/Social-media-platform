@@ -121,7 +121,7 @@ const forgotPassword = async (req, res) => {
 
         sendPasswordResetToken(email, resetToken, req);
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             message: "A reset token has been sent",
             details: `Expires in ${tokenExpiry}`
         });
