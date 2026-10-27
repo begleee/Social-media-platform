@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../../generated/lib/prisma.js";
 import { createPost, deletePost, getMyPosts, getPost, getUserPosts, updatePost } from "../controllers/postControllers.js";
-import { authMiddleware, checkRole } from "../middlewares/authMiddleware.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { uploadImages } from "../middlewares/uploadMiddleware.js";
 
 const router = Router();

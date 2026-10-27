@@ -164,6 +164,22 @@ const resetPassword = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
+};
+
+const deleteAccount = async (req, res) => {
+    const userId = req.user.id;
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        });
+
+        console.log(user);
+    } catch (error) {
+        return res.status(500).json({ message: "Request failed." + error.message });
+    }
+
 }
 
 export { register, login, logout, forgotPassword, resetPassword };
