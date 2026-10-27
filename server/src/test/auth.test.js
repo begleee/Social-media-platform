@@ -3,7 +3,7 @@ import request from "supertest";
 import app from "../app.js";
 
 describe("Authentication flow", () => {
-  describe("POST /login", () => {
+  describe("/login", () => {
     it("should return a jwt token when credentials are valid", async () => {
       const response = await request(app)
         .post("/login")
@@ -21,6 +21,16 @@ describe("Authentication flow", () => {
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBe("Invalid email or password");
+    });
+  });
+
+  describe("/logout", () => {
+    it("should return message \"Logout successfully\" and status 200", async () => {
+      const response = await request(app)
+        .post("/logout");
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Logout successfully");
     });
   });
 
