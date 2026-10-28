@@ -3,7 +3,17 @@ import request from "supertest";
 import app from "../app.js";
 
 describe("Authentication flow", () => {
-  describe("/login", () => {
+  describe("POST /register", () => {
+    it("should return status 400 with error messages", async () => {
+      const response = await request(app)
+        .post("/register")
+        .send({ name: "wn", email: "wrongmail", password: "1111" });
+
+        
+    });
+  });
+
+  describe("POST /login", () => {
     it("should return a jwt token when credentials are valid", async () => {
       const response = await request(app)
         .post("/login")
@@ -24,7 +34,7 @@ describe("Authentication flow", () => {
     });
   });
 
-  describe("/logout", () => {
+  describe("POST /logout", () => {
     it("should return message \"Logout successfully\" and status 200", async () => {
       const response = await request(app)
         .post("/logout");
