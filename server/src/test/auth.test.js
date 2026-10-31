@@ -9,7 +9,9 @@ describe("Authentication flow", () => {
         .post("/register")
         .send({ name: "wn", email: "wrongmail", password: "1111" });
 
-        
+        expect(response.body.errors[0].message).toBe("Name length must be at least 3 characters");
+        expect(response.body.errors[1].message).toBe("Invalid email format");
+        expect(response.body.errors[2].message).toBe("Password length must be at least 8 characters");
     });
   });
 
@@ -27,7 +29,7 @@ describe("Authentication flow", () => {
     it("should reject invalid credenails with 401", async () => {
       const response = await request(app)
         .post("/login")
-        .send({ email: "wrongemail", password: "wrongpassword" });
+        .send({ email: "wrongemail@gmail.com", password: "wrongpassword" });
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBe("Invalid email or password");
